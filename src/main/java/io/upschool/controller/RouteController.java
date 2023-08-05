@@ -20,7 +20,7 @@ public class RouteController {
         return ResponseEntity.ok(routeService.getAllRoutes());
     }
     @PostMapping
-    public ResponseEntity<RouteResponse> createRoute(@RequestBody RouteRequest routeRequest){
+    public ResponseEntity<RouteResponse> createRoute(@RequestBody RouteRequest routeRequest) throws Exception {
         return ResponseEntity.ok(routeService.createRoute(routeRequest));
     }
 }

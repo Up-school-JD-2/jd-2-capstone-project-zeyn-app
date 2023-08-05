@@ -2,6 +2,8 @@ package io.upschool.service;
 
 import io.upschool.dto.routeDto.RouteRequest;
 import io.upschool.dto.routeDto.RouteResponse;
+import io.upschool.exceptions.AirportException;
+import io.upschool.exceptions.RouteException;
 import io.upschool.model.Airport;
 import io.upschool.model.Route;
 import io.upschool.repository.RouteRepository;
@@ -26,9 +28,18 @@ public class RouteService {
                         .build()).toList();
     }
 
-    public RouteResponse createRoute(RouteRequest routeRequest) {
-        Airport arrivalAirport = airportService.findAirportByName(routeRequest.getArrivalAirportName());
-        Airport departureAirport = airportService.findAirportByName(routeRequest.getDepartureAirportName());
+    public RouteResponse createRoute(RouteRequest routeRequest) throws AirportException, RouteException {
+        Airport arrivalAirport = airportService.getAirport(routeRequest.getArrivalAirportId());
+        Airport departureAirport = airportService.getAirport(routeRequest.getDepartureAirportId());
+
+        if (arrivalAirport.getName().equalsIgnoreCase(departureAirport.getName()))
+            throw new RouteException(RouteException.DEPARTURE_AND_ARRIVAL_AIRPORT_CANNOT_BE_THE_SAME);
+
+        List<Route> routeList = routeRepository.findAll().stream().filter(route ->
+                route.getArrivalAirport().getName().equalsIgnoreCase(arrivalAirport.getName()) &&
+                        route.getDepartureAirport().getName().equalsIgnoreCase(departureAirport.getName())).toList();
+
+        if(routeList.size()!=0) throw new RouteException(RouteException.ROUTE_DUPLICATED_EXCEPTION);
 
         Route route = routeRepository.save(Route.builder()
                 .arrivalAirport(arrivalAirport)
@@ -41,5 +52,9 @@ public class RouteService {
                 .departureAirportName(route.getDepartureAirport().getName())
                 .arrivalAirportName(route.getArrivalAirport().getName())
                 .build();
+    }
+
+    public Route getRoute(Long routeId) {
+        return routeRepository.findById(routeId).orElseThrow();
     }
 }

@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RouteRequest {
-    private String departureAirportName;
-    private String arrivalAirportName;
+    private Long departureAirportId;
+    private Long arrivalAirportId;
 }
