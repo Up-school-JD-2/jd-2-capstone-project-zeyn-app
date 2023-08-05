@@ -1,0 +1,41 @@
+ENDPOINTS
+	Airline Company
+	- Get: localhost:8080/api/airlineCompanies --> tüm firmalar getirilecek (OK)
+	- Get: localhost:8080/api/airlineCompanies?name=sampleName --> ismi uyan firmalar getirilecek (liste tutlabilir) (OK)
+	- Get: localhost:8080/api/airlineCompanies/{id}/flights --> ilgili firmaya ait tüm uçuş bilgilerini getir (OK)
+
+	- Get: localhost:8080/api/airlineCompanies/flights?from=departureCity&to=arrivalCity --> (firmalardaki uçuşların kalkış ve varış yerlerine göre uçuşları getir)
+
+	- Post: localhost:8080/api/airlineCompanies
+		{
+ 		  "name": "Anadolu Jet 2",
+    		  "emailAddress": "anadoluJet2@airlineInfo.com",
+   		  "phoneNumber":"78496525863"
+		}
+		(OK)
+
+
+	Airport:
+	- Get: localhost:8080/api/airports
+	- Get: localhost:8080/api/airports/name?name=and
+	- Post: localhost:8080/api/airports
+		{
+    		  "name": "Bandırma Havalimanı",
+   	   	  "location": "Balıkesir"
+		}
+
+
+
+EXCEPTIONS
+	Airport
+	- location and name can not be null (OK)
+	- location-name pair can not be repeated (OK)
+	
+	Airline Company
+	- name can not be null
+	- ???
+
+
+
+?
+- bilemedim??? : rota eklenince, arrival ve departure değiştirip yine eklensin mi??
