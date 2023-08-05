@@ -18,10 +18,10 @@ public class Flight {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Integer capacity;
+    @Builder.Default
+    private Integer capacity = 35;
     private LocalDateTime departureDateTime;
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "route_id")
     private Route route;
     @ManyToOne(fetch = FetchType.LAZY)
