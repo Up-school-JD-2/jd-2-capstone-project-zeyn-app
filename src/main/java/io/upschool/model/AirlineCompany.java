@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "airline_companies")
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,6 +15,7 @@ public class AirlineCompany {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String name;
     private String emailAddress;
     private String phoneNumber;
