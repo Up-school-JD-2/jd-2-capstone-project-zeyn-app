@@ -5,16 +5,20 @@ import io.upschool.dto.flightDto.FlightResponse;
 import io.upschool.service.FlightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/flights")
 @RequiredArgsConstructor
 public class FlightController {
     private final FlightService flightService;
+
+    @GetMapping
+    public ResponseEntity<List<FlightResponse>> getAllFlights(){
+        return ResponseEntity.ok(flightService.getAllFlights());
+    }
 
     @PostMapping
     public ResponseEntity<FlightResponse> createFlight(@RequestBody FlightRequest flightRequest){
