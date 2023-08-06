@@ -52,4 +52,15 @@ public class FlightService {
                 .departureDateTime(flight.getDepartureDateTime())
                 .build();
     }
+
+    public List<FlightResponse> getAllFlights() {
+        return flightRepository.findAll().stream().map(flight -> FlightResponse.builder()
+                .id(flight.getId())
+                .capacity(flight.getCapacity())
+                .departureDateTime(flight.getDepartureDateTime())
+                .arrivalAirportName(flight.getRoute().getArrivalAirport().getName())
+                .departureAirportName(flight.getRoute().getDepartureAirport().getName())
+                .airlineCompanyId(flight.getAirlineCompany().getId())
+                .build()).toList();
+    }
 }
