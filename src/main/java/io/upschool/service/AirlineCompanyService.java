@@ -47,7 +47,7 @@ public class AirlineCompanyService {
     }
 
     public List<FlightResponse> getAllFlightsByAirlineCompanyId(Long id) throws AirlineCompanyException {
-        AirlineCompany airlineCompany = airlineCompanyRepository.findById(id).orElseThrow(()->new AirlineCompanyException(AirlineCompanyException.DATA_NOT_FOUND));//company not found exception
+        AirlineCompany airlineCompany = airlineCompanyRepository.findById(id).orElseThrow(() -> new AirlineCompanyException(AirlineCompanyException.DATA_NOT_FOUND));//company not found exception
 
         //return flightService.getAllFlightsByAirlineCompanyId(airlineCompany.getId());
 
@@ -85,14 +85,17 @@ public class AirlineCompanyService {
     }
 
     public FlightResponse createFlightOnAirlineCompany(Long id, CompanyFlightRequest companyFlightRequest) throws AirlineCompanyException {
-        AirlineCompany airlineCompany = airlineCompanyRepository.findById(id).orElseThrow(() -> new AirlineCompanyException(AirlineCompanyException.DATA_NOT_FOUND));
+        AirlineCompany airlineCompany = airlineCompanyRepository.findById(id)
+                .orElseThrow(() -> new AirlineCompanyException(AirlineCompanyException.DATA_NOT_FOUND));
+
         Route route = routeService.getRoute(companyFlightRequest.getRouteId());
 
-        Flight flight = flightRepository.save(Flight.builder()
-                .airlineCompany(airlineCompany)
-                .route(route)
-                .departureDateTime(companyFlightRequest.getDepartureDateTime())
-                .build());
+        Flight flight = flightRepository.save(
+                Flight.builder()
+                        .airlineCompany(airlineCompany)
+                        .route(route)
+                        .departureDateTime(companyFlightRequest.getDepartureDateTime())
+                        .build());
 
         return FlightResponse.builder()
                 .id(flight.getId())
@@ -110,22 +113,21 @@ public class AirlineCompanyService {
                     arrivalCity.get().equalsIgnoreCase(routeResponse.getArrivalAirportName())
                             && departureCity.get().equalsIgnoreCase(routeResponse.getDepartureAirportName())).toList();
             return flightResponses(routeResponseList);
-        }
-        else if (departureCity.isPresent()) {
+        } else if (departureCity.isPresent()) {
             List<RouteResponse> routeResponseList = routeService.getAllRoutes().stream().filter(routeResponse -> departureCity.get().equalsIgnoreCase(routeResponse.getDepartureAirportName())).toList();
             return flightResponses(routeResponseList);
-        }
-        else if (arrivalCity.isPresent()) {
+        } else if (arrivalCity.isPresent()) {
             List<RouteResponse> routeResponseList = routeService.getAllRoutes().stream().filter(routeResponse -> arrivalCity.get().equalsIgnoreCase(routeResponse.getArrivalAirportName())).toList();
             return flightResponses(routeResponseList);
         }
         return null;
     }
-    private List<FlightResponse> flightResponses(List<RouteResponse> routeResponseList){
+
+    private List<FlightResponse> flightResponses(List<RouteResponse> routeResponseList) {
         Long id = routeResponseList.get(0).getId();
         List<Flight> flights = flightRepository.findAll().stream().filter(flight -> id.equals(flight.getRoute().getId())).toList();
 
-        return flights.stream().map(flight->FlightResponse.builder()
+        return flights.stream().map(flight -> FlightResponse.builder()
                 .id(flight.getId())
                 .capacity(flight.getCapacity())
                 .departureDateTime(flight.getDepartureDateTime())

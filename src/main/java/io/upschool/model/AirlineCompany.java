@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "airline_companies")
 @Data
 @Builder
 @NoArgsConstructor
