@@ -35,9 +35,11 @@ public class RouteService {
         if (arrivalAirport.getName().equalsIgnoreCase(departureAirport.getName()))
             throw new RouteException(RouteException.DEPARTURE_AND_ARRIVAL_AIRPORT_CANNOT_BE_THE_SAME);
 
-        List<Route> routeList = routeRepository.findAll().stream().filter(route ->
+        List<Route> routeList = routeRepository.findAll().stream()
+                .filter(route ->
                 route.getArrivalAirport().getName().equalsIgnoreCase(arrivalAirport.getName()) &&
-                        route.getDepartureAirport().getName().equalsIgnoreCase(departureAirport.getName())).toList();
+                        route.getDepartureAirport().getName().equalsIgnoreCase(departureAirport.getName()))
+                .toList();
 
         if(routeList.size()!=0) throw new RouteException(RouteException.ROUTE_DUPLICATED_EXCEPTION);
 
