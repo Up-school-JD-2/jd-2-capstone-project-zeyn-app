@@ -21,7 +21,7 @@ public class AirportController {
         return ResponseEntity.ok(airportService.getAllAirports());
     }
     @GetMapping("/{name}")
-    public ResponseEntity<List<AirportResponse>> getAirportsByName(@RequestParam("name") String name){
+    public ResponseEntity<List<AirportResponse>> getAirportsByName(@RequestParam String name){
         return ResponseEntity.ok(airportService.findAirportByName(name));
     }
     @PostMapping
