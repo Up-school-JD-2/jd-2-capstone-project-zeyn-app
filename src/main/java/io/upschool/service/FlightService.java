@@ -3,6 +3,7 @@ package io.upschool.service;
 import io.upschool.dto.flightDto.FlightRequest;
 import io.upschool.dto.flightDto.FlightResponse;
 import io.upschool.exceptions.AirlineCompanyException;
+import io.upschool.exceptions.FlightException;
 import io.upschool.model.AirlineCompany;
 import io.upschool.model.Flight;
 import io.upschool.model.Route;
@@ -42,11 +43,12 @@ public class FlightService {
         return flightRepository.findAll().stream().map(this::flightEntityToFlightResponse).toList();
     }
 
-    public List<FlightResponse> getAllByRouteDepartureAirportLocationAndRouteArrivalAirportLocation
-            (String departureCity, String arrivalCity) {
+    public List<FlightResponse> getAllFlightsByRoute(String departureCity, String arrivalCity) {
+
         List<Flight> flights = flightRepository.findAllByRouteDepartureAirportLocationAndRouteArrivalAirportLocation
                 (departureCity, arrivalCity);
         return flights.stream().map(this::flightEntityToFlightResponse).toList();
+        //return flights.stream().map(flight -> flightEntityToFlightResponse(flight)).toList();
 
     }
 
@@ -69,4 +71,7 @@ public class FlightService {
                 .build());
     }
 
+    public Flight getFlightById(Long id) throws FlightException {
+        return flightRepository.findById(id).orElseThrow(()-> new FlightException(FlightException.DATA_NOT_FOUND));
+    }
 }
