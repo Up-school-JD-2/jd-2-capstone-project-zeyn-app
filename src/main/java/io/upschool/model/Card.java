@@ -14,11 +14,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Card {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String cardNumber;
     private String expirationDate;
     private String cvv;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Passenger passenger;
 }
