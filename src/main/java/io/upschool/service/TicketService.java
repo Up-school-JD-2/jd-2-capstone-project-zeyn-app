@@ -29,6 +29,9 @@ public class TicketService {
         return ticketRepository.findAll().stream().
                 map(this::entityToResponse).toList();
     }
+    public TicketResponse getTicketByTicketNumber(String ticketNumber) {
+        return entityToResponse(ticketRepository.findByTicketNumber(ticketNumber));
+    }
 
     public TicketResponse createTicket(TicketRequest ticketRequest) throws FlightException, CardNumberException {
         Ticket ticket = requestToEntity(ticketRequest);

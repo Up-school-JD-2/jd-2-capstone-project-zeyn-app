@@ -22,7 +22,7 @@ public class Ticket {
     private Long id;
    // private String seatNumber;
     @Builder.Default
-    private String ticketNumber  = UUID.randomUUID().toString().substring(8,23);
+    private String ticketNumber  = UUID.randomUUID().toString().substring(9,23).toUpperCase();
     private Double price;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "flight_id")

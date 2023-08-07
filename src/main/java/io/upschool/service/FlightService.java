@@ -51,6 +51,9 @@ public class FlightService {
         //return flights.stream().map(flight -> flightEntityToFlightResponse(flight)).toList();
 
     }
+    public Flight getFlightById(Long id) throws FlightException {
+        return flightRepository.findById(id).orElseThrow(() -> new FlightException(FlightException.DATA_NOT_FOUND));
+    }
 
     private FlightResponse flightEntityToFlightResponse(Flight flight) {
         return FlightResponse.builder()
@@ -69,9 +72,5 @@ public class FlightService {
                 .route(route)
                 .departureDateTime(flightRequest.getDepartureDateTime())
                 .build());
-    }
-
-    public Flight getFlightById(Long id) throws FlightException {
-        return flightRepository.findById(id).orElseThrow(()-> new FlightException(FlightException.DATA_NOT_FOUND));
     }
 }

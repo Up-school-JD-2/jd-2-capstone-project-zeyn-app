@@ -20,13 +20,17 @@ public class TicketController {
     public ResponseEntity<List<TicketResponse>> getAllTickets(){
         return ResponseEntity.ok(ticketService.getAllTickets());
     }
+    @GetMapping("/search")
+    public ResponseEntity<TicketResponse> getTicketByTicketNumber(@RequestParam("ticketNumber") String ticketNumber){
+        return ResponseEntity.ok(ticketService.getTicketByTicketNumber(ticketNumber));
+    }
 
     @PostMapping
     public ResponseEntity<TicketResponse> createTicket(@RequestBody TicketRequest ticketRequest) throws FlightException, CardNumberException {
         return ResponseEntity.ok(ticketService.createTicket(ticketRequest));
     }
-    @DeleteMapping("{ticketNumber}")
-    public void cancelTicket(@PathVariable String ticketNumber){
+    @DeleteMapping("/cancel")
+    public void cancelTicket(@RequestParam("ticketNumber") String ticketNumber){
         ticketService.cancelTicket(ticketNumber);
     }
 }
