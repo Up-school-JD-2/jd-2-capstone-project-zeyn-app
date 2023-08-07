@@ -21,7 +21,4 @@ public class Passenger {
     private String identityNumber;
     private String emailAddress;
     private String phoneNumber;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "flight_id")
-    private Flight flight;
 }
