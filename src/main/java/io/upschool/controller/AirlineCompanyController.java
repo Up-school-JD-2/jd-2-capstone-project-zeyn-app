@@ -37,6 +37,15 @@ public class AirlineCompanyController {
         return ResponseEntity.ok(airlineCompanyService.getAllFlightsByRoutes(departureCity, arrivalCity));
     }
 
+    @GetMapping("/flightRoute/{companyId}")
+    public ResponseEntity<List<FlightResponse>> getAllFlightsByRoutesAndByAirlineId
+            (@RequestParam("companyId") Long companyId, @RequestParam("from") String departureCity,
+                                                                      @RequestParam("to") String arrivalCity){
+        return ResponseEntity.ok(airlineCompanyService.
+                getAllFlightsByRoutesAndByAirlineId(companyId, departureCity, arrivalCity));
+    }
+
+
     @PostMapping
     public ResponseEntity<AirlineCompanyResponse> createAirlineCompany(@RequestBody AirlineCompanyRequest airlineCompanyRequest){
         return ResponseEntity.ok(airlineCompanyService.createAirlineCompany(airlineCompanyRequest));

@@ -43,7 +43,14 @@ public class AirlineCompanyService {
     }
 
     public List<FlightResponse> getAllFlightsByRoutes(String departureCity, String arrivalCity) {
-        return flightService.getAllByRouteDepartureAirportLocationAndRouteArrivalAirportLocation(departureCity, arrivalCity);
+        return flightService.getAllFlightsByRoute(departureCity, arrivalCity);
+    }
+
+    public List<FlightResponse> getAllFlightsByRoutesAndByAirlineId(Long id, String departureCity, String arrivalCity) {
+        AirlineCompany airlineCompany = airlineCompanyRepository.findById(id).orElseThrow();
+        return flightService.getAllFlightsByRoute(departureCity, arrivalCity).stream()
+                .filter(flightResponse ->
+                        airlineCompany.getId().equals(flightResponse.getAirlineCompanyId())).toList();
     }
 
     public AirlineCompanyResponse createAirlineCompany(AirlineCompanyRequest airlineCompanyRequest) {
