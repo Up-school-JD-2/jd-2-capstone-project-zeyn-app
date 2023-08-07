@@ -10,4 +10,5 @@ import java.util.List;
 public interface AirlineCompanyRepository extends JpaRepository<AirlineCompany, Long> {
     // List<AirlineCompany> findAirlineCompaniesByName(String name);
     List<AirlineCompany> findAirlineCompaniesByNameContainingIgnoreCase(String name);
+
 }
