@@ -21,7 +21,7 @@ public class AirlineCompanyController {
     public ResponseEntity<List<AirlineCompanyResponse>> getAllAirlineCompanies(){
         return ResponseEntity.ok(airlineCompanyService.getAllAirlineCompanies());
     }
-    @GetMapping("/companyName")
+    @GetMapping("/searchByName")
     public ResponseEntity<List<AirlineCompanyResponse>> getAirlineCompaniesByName(@RequestParam("name") String name){
         return ResponseEntity.ok(airlineCompanyService.getAirlineCompaniesByName(name));
     }
@@ -31,21 +31,19 @@ public class AirlineCompanyController {
     }
 
     // localhost:8080/api/airlineCompanies/flights?from=departureCity&to=arrivalCity
-    @GetMapping("/flightRoute")
+    @GetMapping("/route")
     public ResponseEntity<List<FlightResponse>> getAllFlightsByRoutes(@RequestParam("from") String departureCity,
                                                                       @RequestParam("to") String arrivalCity){
         return ResponseEntity.ok(airlineCompanyService.getAllFlightsByRoutes(departureCity, arrivalCity));
     }
 
-    @GetMapping("/flightRoute/{companyId}")
+    @GetMapping("/routeAndCompanyId")
     public ResponseEntity<List<FlightResponse>> getAllFlightsByRoutesAndByAirlineId
-            (@RequestParam("companyId") Long companyId, @RequestParam("from") String departureCity,
-                                                                      @RequestParam("to") String arrivalCity){
+            (@RequestParam("id") Long companyId, @RequestParam("from") String departureCity,
+                                                                      @RequestParam("to") String arrivalCity) throws AirlineCompanyException {
         return ResponseEntity.ok(airlineCompanyService.
                 getAllFlightsByRoutesAndByAirlineId(companyId, departureCity, arrivalCity));
     }
-
-
     @PostMapping
     public ResponseEntity<AirlineCompanyResponse> createAirlineCompany(@RequestBody AirlineCompanyRequest airlineCompanyRequest){
         return ResponseEntity.ok(airlineCompanyService.createAirlineCompany(airlineCompanyRequest));
