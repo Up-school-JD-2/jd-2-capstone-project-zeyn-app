@@ -6,6 +6,7 @@ import io.upschool.dto.flightDto.CompanyFlightRequest;
 import io.upschool.dto.flightDto.FlightRequest;
 import io.upschool.dto.flightDto.FlightResponse;
 import io.upschool.exceptions.AirlineCompanyException;
+import io.upschool.exceptions.RouteException;
 import io.upschool.model.AirlineCompany;
 import io.upschool.model.Route;
 import io.upschool.repository.AirlineCompanyRepository;
@@ -31,7 +32,8 @@ public class AirlineCompanyService {
     public List<AirlineCompanyResponse> getAirlineCompaniesByName(String name) {
         List<AirlineCompany> airlineCompanies = airlineCompanyRepository.findAirlineCompaniesByNameContainingIgnoreCase(name);
         return airlineCompanies
-                .stream().map(this::entityToResponse)
+                .stream()
+                .map(this::entityToResponse)
                 .toList();
     }
 
@@ -59,7 +61,7 @@ public class AirlineCompanyService {
         return entityToResponse(airlineCompany);
     }
 
-    public FlightResponse createFlightOnAirlineCompany(Long id, CompanyFlightRequest companyFlightRequest) throws AirlineCompanyException {
+    public FlightResponse createFlightOnAirlineCompany(Long id, CompanyFlightRequest companyFlightRequest) throws AirlineCompanyException, RouteException {
         AirlineCompany airlineCompany = airlineCompanyRepository.findById(id)
                 .orElseThrow(() -> new AirlineCompanyException(AirlineCompanyException.DATA_NOT_FOUND));
 

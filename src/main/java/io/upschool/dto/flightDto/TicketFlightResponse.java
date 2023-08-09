@@ -15,4 +15,6 @@ public class TicketFlightResponse {
     private LocalDateTime departureDateTime;
     private String departureAirportName;
     private String arrivalAirportName;
+    private Integer capacity;
+    private Integer occupancy;
 }

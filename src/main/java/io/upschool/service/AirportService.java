@@ -18,20 +18,18 @@ public class AirportService {
     public List<AirportResponse> getAllAirports() {
         return airportRepository.findAll()
                 .stream()
-                .map(airport ->
-                        AirportResponse.builder()
-                                .id(airport.getId())
-                                .name(airport.getName())
-                                .location(airport.getLocation())
-                                .build()).toList();
+                .map(airport -> AirportResponse.builder()
+                        .id(airport.getId())
+                        .name(airport.getName())
+                        .location(airport.getLocation())
+                        .build()).toList();
     }
 
     public AirportResponse createAirport(AirportRequest airportRequest) throws AirportException {
-        String nameLocationPair = airportRequest.getName() + airportRequest.getLocation();
+        List<Airport> airportList = airportRepository.findByNameAndLocationContainingIgnoreCase
+                (airportRequest.getName(), airportRequest.getLocation());
 
-        List<Airport> airportList = airportRepository.findAll().stream().filter(airport -> nameLocationPair.equalsIgnoreCase(airport.getName() + airport.getLocation())).toList();
-
-        if(airportList.size()!=0) throw new AirportException(AirportException.AIRPORT_EXIST);
+        if (airportList.size() != 0) throw new AirportException(AirportException.AIRPORT_EXIST);
 
         Airport airport = airportRepository.save(
                 Airport.builder()
@@ -59,6 +57,6 @@ public class AirportService {
     }
 
     public Airport getAirport(Long airportId) throws AirportException {
-        return airportRepository.findById(airportId).orElseThrow(()-> new AirportException(AirportException.DATA_NOT_FOUND));
+        return airportRepository.findById(airportId).orElseThrow(() -> new AirportException(AirportException.DATA_NOT_FOUND));
     }
 }

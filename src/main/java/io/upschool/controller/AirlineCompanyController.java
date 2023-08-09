@@ -5,6 +5,7 @@ import io.upschool.dto.airlineCompanyDto.AirlineCompanyResponse;
 import io.upschool.dto.flightDto.CompanyFlightRequest;
 import io.upschool.dto.flightDto.FlightResponse;
 import io.upschool.exceptions.AirlineCompanyException;
+import io.upschool.exceptions.RouteException;
 import io.upschool.service.AirlineCompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +50,7 @@ public class AirlineCompanyController {
         return ResponseEntity.ok(airlineCompanyService.createAirlineCompany(airlineCompanyRequest));
     }
     @PostMapping("/createFligth/{id}")
-    public ResponseEntity<FlightResponse> createFlightOnAirlineCompany(@PathVariable("id") Long id, @RequestBody CompanyFlightRequest companyFlightRequest) throws AirlineCompanyException {
+    public ResponseEntity<FlightResponse> createFlightOnAirlineCompany(@PathVariable("id") Long id, @RequestBody CompanyFlightRequest companyFlightRequest) throws AirlineCompanyException, RouteException {
         return ResponseEntity.ok(airlineCompanyService.createFlightOnAirlineCompany(id, companyFlightRequest));
     }
 }

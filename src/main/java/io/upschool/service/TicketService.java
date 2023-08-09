@@ -26,28 +26,38 @@ public class TicketService {
     private final TicketRepository ticketRepository;
 
     public List<TicketResponse> getAllTickets() {
-        return ticketRepository.findAll().stream().
-                map(this::entityToResponse).toList();
+        return ticketRepository.findAll().stream().map(this::entityToResponse).toList();
     }
+
     public TicketResponse getTicketByTicketNumber(String ticketNumber) {
         return entityToResponse(ticketRepository.findByTicketNumber(ticketNumber));
     }
 
     public TicketResponse createTicket(TicketRequest ticketRequest) throws FlightException, CardNumberException {
         Ticket ticket = requestToEntity(ticketRequest);
+        int updatedOccupancy = ticket.getFlight().getOccupancy() + 1;
+        Flight flight = flightService.updateFlightOccupancy(ticket.getFlight(), updatedOccupancy);
+        ticket.setFlight(flight);
+        ticketRepository.save(ticket);
         return entityToResponse(ticket);
     }
 
-    public void cancelTicket(String ticketNumber) {
+    public void cancelTicket(String ticketNumber) throws FlightException {
         Ticket ticket = ticketRepository.findByTicketNumber(ticketNumber);
+        int updatedOccupancy = ticket.getFlight().getOccupancy() - 1;
+        Flight flight = flightService.updateFlightOccupancy(ticket.getFlight(), updatedOccupancy);
+        ticket.setFlight(flight);
         ticket.setIsActive(false);
         ticketRepository.save(ticket);
     }
+
     private Ticket requestToEntity(TicketRequest ticketRequest) throws FlightException, CardNumberException {
         Passenger passenger = passengerService.createPassenger(ticketRequest.getPassengerRequest());
         Card card = cardService.createCard(ticketRequest.getCardRequest());
-
         Flight flight = flightService.getFlightById(ticketRequest.getFlightId());
+
+//        flight.setCapacity(flight.getCapacity()-1);
+//        flightService.createFlight(flight);
 
         return ticketRepository.save(Ticket.builder()
                 .price(ticketRequest.getTicketPrice())
@@ -74,6 +84,8 @@ public class TicketService {
                 .departureDateTime(flight.getDepartureDateTime())
                 .departureAirportName(flight.getRoute().getDepartureAirport().getName())
                 .arrivalAirportName(flight.getRoute().getArrivalAirport().getName())
+                .occupancy(flight.getOccupancy())
+                .capacity(flight.getCapacity())
                 .build();
 
         return TicketResponse.builder()

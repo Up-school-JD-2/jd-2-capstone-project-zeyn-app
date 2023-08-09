@@ -18,7 +18,7 @@ public class Passenger {
     private Long id;
     private String name;
     private String surname;
-    private String identityNumber;
+    private String identityNumber; //11 karakter
     private String emailAddress;
     private String phoneNumber;
 }

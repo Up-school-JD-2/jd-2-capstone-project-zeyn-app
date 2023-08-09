@@ -1,0 +1,342 @@
+{
+	"info": {
+		"_postman_id": "71706ea8-5fd1-4a6b-809d-047d526d0956",
+		"name": "airline_ticketing_system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24251878"
+	},
+	"item": [
+		{
+			"name": "airport",
+			"item": [
+				{
+					"name": "get airports",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/airports",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create airports",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Yılmaz Büyükerşen Havalimanı\",\r\n    \"location\": \"Eskişehir\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/airports",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get airports by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/airports/name?name=man",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airports",
+								"name"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "man"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "route",
+			"item": [
+				{
+					"name": "get routes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/routes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"routes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create routes",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"departureAirportId\": 3,\r\n    \"arrivalAirportId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/routes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"routes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "airline company",
+			"item": [
+				{
+					"name": "get airline companies",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/airlineCompanies",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airlineCompanies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get airline companies by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/airlineCompanies/name?name=peg",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airlineCompanies",
+								"name"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "peg"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create airline companies",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pegasus\",\r\n    \"emailAddress\": \"pegasus@airlineInfo.com\",\r\n    \"phoneNumber\":\"78496525863\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/airlineCompanies",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airlineCompanies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get flights for one company",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/airlineCompanies/1/flights",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airlineCompanies",
+								"1",
+								"flights"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create flight on airline company",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"departureDateTime\": \"2023-08-05T10:15:30\",\r\n    \"routeId\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/airlineCompanies/2/createFligth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airlineCompanies",
+								"2",
+								"createFligth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get flights by route",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "flights",
+			"item": [
+				{
+					"name": "create flight",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"departureDateTime\": \"2023-08-05T10:15:30\",\r\n    \"routeId\": 2,\r\n    \"airlineCompanyId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/flights",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"flights"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all flights",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/flights",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"flights"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

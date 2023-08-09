@@ -19,6 +19,7 @@ public class Route {
     @ManyToOne(fetch = FetchType.LAZY)
     private Airport departureAirport;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable=false)
     private Airport arrivalAirport;
     private Boolean isActive;
 }

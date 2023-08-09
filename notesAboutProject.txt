@@ -4,7 +4,9 @@ ENDPOINTS
 	- Get: localhost:8080/api/airlineCompanies?name=sampleName --> ismi uyan firmalar getirilecek (liste tutlabilir) (OK)
 	- Get: localhost:8080/api/airlineCompanies/{id}/flights --> ilgili firmaya ait tüm uçuş bilgilerini getir (OK)
 
-	- Get: localhost:8080/api/airlineCompanies/flights?from=departureCity&to=arrivalCity --> (firmalardaki uçuşların kalkış ve varış yerlerine göre uçuşları getir)
+	- Get: localhost:8080/api/airlineCompanies/flights?from=departureCity&to=arrivalCity 
+		--> (firmalardaki uçuşların kalkış ve varış yerlerine göre uçuşları getir): oldu ama bazı kısıtlar eklenmeli
+	- Get: flight by time???
 
 	- Post: localhost:8080/api/airlineCompanies
 		{
@@ -33,9 +35,10 @@ EXCEPTIONS
 	
 	Airline Company
 	- name can not be null
-	- ???
+	- name may be unique
 
 
 
 ?
 - bilemedim??? : rota eklenince, arrival ve departure değiştirip yine eklensin mi??
+- aynı saatte aynı firmanın sadece bir uçuşu olsun

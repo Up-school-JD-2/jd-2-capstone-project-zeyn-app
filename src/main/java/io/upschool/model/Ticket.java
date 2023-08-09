@@ -20,18 +20,17 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-   // private String seatNumber;
     @Builder.Default
-    private String ticketNumber  = UUID.randomUUID().toString().substring(9,23).toUpperCase();
+    private String ticketNumber  = UUID.randomUUID().toString().toUpperCase();
     private Double price;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "flight_id")
+    @JoinColumn(name = "flight_id", nullable=false)
     private Flight flight;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id")
+    @JoinColumn(name = "card_id", nullable=false)
     private Card card;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "passenger_id")
+    @JoinColumn(name = "passenger_id", nullable=false)
     private Passenger passenger;
     private Boolean isActive;
 }

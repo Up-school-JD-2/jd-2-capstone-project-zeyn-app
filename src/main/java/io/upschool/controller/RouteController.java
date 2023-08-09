@@ -16,9 +16,10 @@ public class RouteController {
     private final RouteService routeService;
 
     @GetMapping
-    public ResponseEntity<List<RouteResponse>> getAllRoutes(){
+    public ResponseEntity<List<RouteResponse>> getAllRoutes() {
         return ResponseEntity.ok(routeService.getAllRoutes());
     }
+
     @PostMapping
     public ResponseEntity<RouteResponse> createRoute(@RequestBody RouteRequest routeRequest) throws Exception {
         return ResponseEntity.ok(routeService.createRoute(routeRequest));

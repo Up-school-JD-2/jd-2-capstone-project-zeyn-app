@@ -1,6 +1,7 @@
 package io.upschool.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Size(min=16, max=16)
     private String cardNumber;
     private String expirationDate;
     private String cvv;
