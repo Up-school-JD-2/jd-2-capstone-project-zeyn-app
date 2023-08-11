@@ -5,6 +5,7 @@ import io.upschool.dto.airportDto.AirportResponse;
 import io.upschool.exceptions.AirportException;
 import io.upschool.model.Airport;
 import io.upschool.repository.AirportRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class AirportService {
                         .build()).toList();
     }
 
+    @Transactional
     public AirportResponse createAirport(AirportRequest airportRequest) throws AirportException {
         List<Airport> airportList = airportRepository.findByNameAndLocationContainingIgnoreCase
                 (airportRequest.getName(), airportRequest.getLocation());

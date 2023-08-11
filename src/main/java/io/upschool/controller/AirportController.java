@@ -4,6 +4,7 @@ import io.upschool.dto.airportDto.AirportRequest;
 import io.upschool.dto.airportDto.AirportResponse;
 import io.upschool.exceptions.AirportException;
 import io.upschool.service.AirportService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class AirportController {
         return ResponseEntity.ok(airportService.findAirportByName(name));
     }
     @PostMapping
-    public ResponseEntity<AirportResponse> createAirport(@RequestBody AirportRequest airportRequest) throws AirportException {
+    public ResponseEntity<AirportResponse> createAirport(@Valid @RequestBody AirportRequest airportRequest) throws AirportException {
         return ResponseEntity.ok(airportService.createAirport(airportRequest));
     }
 }
