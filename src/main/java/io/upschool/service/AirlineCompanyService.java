@@ -10,6 +10,7 @@ import io.upschool.exceptions.RouteException;
 import io.upschool.model.AirlineCompany;
 import io.upschool.model.Route;
 import io.upschool.repository.AirlineCompanyRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -54,9 +55,10 @@ public class AirlineCompanyService {
         return flightService.getAllFlightsByRoute(departureCity, arrivalCity).stream()
                 .filter(flightResponse ->
                         airlineCompany.getId().equals(flightResponse.getAirlineCompanyId())).toList();
+//        return flightService.getAllFlightsByRouteAndAirlineCompanyId(airlineCompany.getId(), departureCity, arrivalCity);
     }
 
-    public AirlineCompanyResponse createAirlineCompany(AirlineCompanyRequest airlineCompanyRequest) {
+    public AirlineCompanyResponse createAirlineCompany(AirlineCompanyRequest airlineCompanyRequest) throws AirlineCompanyException {
         AirlineCompany airlineCompany = requestToEntity(airlineCompanyRequest);
         return entityToResponse(airlineCompany);
     }
@@ -83,7 +85,10 @@ public class AirlineCompanyService {
                 .build();
     }
 
+    @Transactional
     private AirlineCompany requestToEntity(AirlineCompanyRequest airlineCompanyRequest) {
+//        if(airlineCompanyRepository.existsByEmailAddress(airlineCompanyRequest.getEmailAddress()))
+//            throw new AirlineCompanyException(AirlineCompanyException.EMAIL_ADDRESS_EXIST);
         return airlineCompanyRepository.save(AirlineCompany.builder()
                 .name(airlineCompanyRequest.getName())
                 .emailAddress(airlineCompanyRequest.getEmailAddress())

@@ -7,6 +7,7 @@ import io.upschool.dto.flightDto.FlightResponse;
 import io.upschool.exceptions.AirlineCompanyException;
 import io.upschool.exceptions.RouteException;
 import io.upschool.service.AirlineCompanyService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,11 +47,11 @@ public class AirlineCompanyController {
                 getAllFlightsByRoutesAndByAirlineId(companyId, departureCity, arrivalCity));
     }
     @PostMapping
-    public ResponseEntity<AirlineCompanyResponse> createAirlineCompany(@RequestBody AirlineCompanyRequest airlineCompanyRequest){
+    public ResponseEntity<AirlineCompanyResponse> createAirlineCompany(@Valid @RequestBody AirlineCompanyRequest airlineCompanyRequest) throws AirlineCompanyException {
         return ResponseEntity.ok(airlineCompanyService.createAirlineCompany(airlineCompanyRequest));
     }
     @PostMapping("/createFligth/{id}")
-    public ResponseEntity<FlightResponse> createFlightOnAirlineCompany(@PathVariable("id") Long id, @RequestBody CompanyFlightRequest companyFlightRequest) throws AirlineCompanyException, RouteException {
+    public ResponseEntity<FlightResponse> createFlightOnAirlineCompany(@Valid @PathVariable("id") Long id, @RequestBody CompanyFlightRequest companyFlightRequest) throws AirlineCompanyException, RouteException {
         return ResponseEntity.ok(airlineCompanyService.createFlightOnAirlineCompany(id, companyFlightRequest));
     }
 }
