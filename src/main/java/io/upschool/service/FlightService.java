@@ -7,6 +7,7 @@ import io.upschool.model.AirlineCompany;
 import io.upschool.model.Flight;
 import io.upschool.model.Route;
 import io.upschool.repository.FlightRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,9 +44,9 @@ public class FlightService {
         return flightEntityToFlightResponse(flight);
     }
 
-    public Flight updateFlightOccupancy(Flight flight, int updatedOccupancy) throws FlightException {
-        if(updatedOccupancy==flight.getCapacity()) throw new FlightException(FlightException.CAPACITY_IS_FULL);
-        flight.setOccupancy(updatedOccupancy);
+    @Transactional
+    public Flight updateFlightCapacity(Flight flight, int updatedCapacity){
+        flight.setCapacity(updatedCapacity);
         return flightRepository.save(flight);
     }
 
@@ -60,7 +61,7 @@ public class FlightService {
                 .airlineCompanyId(flight.getAirlineCompany().getId())
                 .build();
     }
-
+    @Transactional
     private Flight flightRequestToFlight(FlightRequest flightRequest, AirlineCompany airlineCompany, Route route) {
         return flightRepository.save(Flight.builder()
                 .airlineCompany(airlineCompany)
