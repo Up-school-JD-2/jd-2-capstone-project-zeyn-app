@@ -4,6 +4,7 @@ import io.upschool.dto.ticketDto.TicketRequest;
 import io.upschool.dto.ticketDto.TicketResponse;
 import io.upschool.exceptions.CardNumberException;
 import io.upschool.exceptions.FlightException;
+import io.upschool.exceptions.PassengerException;
 import io.upschool.service.TicketService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,12 +30,12 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<TicketResponse> createTicket(@Valid @RequestBody TicketRequest ticketRequest) throws FlightException, CardNumberException {
+    public ResponseEntity<TicketResponse> createTicket(@Valid @RequestBody TicketRequest ticketRequest) throws FlightException, CardNumberException, PassengerException {
         return ResponseEntity.ok(ticketService.createTicket(ticketRequest));
     }
 
     @DeleteMapping("/cancel")
-    public void cancelTicket(@RequestParam("ticketNumber") String ticketNumber) throws FlightException {
+    public void cancelTicket(@RequestParam("ticketNumber") String ticketNumber){
         ticketService.cancelTicket(ticketNumber);
     }
 }

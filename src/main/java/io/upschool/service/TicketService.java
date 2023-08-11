@@ -7,11 +7,13 @@ import io.upschool.dto.ticketDto.TicketRequest;
 import io.upschool.dto.ticketDto.TicketResponse;
 import io.upschool.exceptions.CardNumberException;
 import io.upschool.exceptions.FlightException;
+import io.upschool.exceptions.PassengerException;
 import io.upschool.model.Card;
 import io.upschool.model.Flight;
 import io.upschool.model.Passenger;
 import io.upschool.model.Ticket;
 import io.upschool.repository.TicketRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,31 +35,33 @@ public class TicketService {
         return entityToResponse(ticketRepository.findByTicketNumber(ticketNumber));
     }
 
-    public TicketResponse createTicket(TicketRequest ticketRequest) throws FlightException, CardNumberException {
+    @Transactional
+    public TicketResponse createTicket(TicketRequest ticketRequest) throws FlightException, CardNumberException, PassengerException {
         Ticket ticket = requestToEntity(ticketRequest);
-        int updatedOccupancy = ticket.getFlight().getOccupancy() + 1;
-        Flight flight = flightService.updateFlightOccupancy(ticket.getFlight(), updatedOccupancy);
+        int capacity = ticket.getFlight().getCapacity() - 1;
+        Flight flight = flightService.updateFlightCapacity(ticket.getFlight(), capacity);
+
         ticket.setFlight(flight);
         ticketRepository.save(ticket);
         return entityToResponse(ticket);
     }
 
-    public void cancelTicket(String ticketNumber) throws FlightException {
+    @Transactional
+    public void cancelTicket(String ticketNumber){
         Ticket ticket = ticketRepository.findByTicketNumber(ticketNumber);
-        int updatedOccupancy = ticket.getFlight().getOccupancy() - 1;
-        Flight flight = flightService.updateFlightOccupancy(ticket.getFlight(), updatedOccupancy);
+        int capacity = ticket.getFlight().getCapacity() + 1;
+        Flight flight = flightService.updateFlightCapacity(ticket.getFlight(), capacity);
+
         ticket.setFlight(flight);
         ticket.setIsActive(false);
         ticketRepository.save(ticket);
     }
 
-    private Ticket requestToEntity(TicketRequest ticketRequest) throws FlightException, CardNumberException {
+    @Transactional
+    private Ticket requestToEntity(TicketRequest ticketRequest) throws FlightException, CardNumberException, PassengerException {
         Passenger passenger = passengerService.createPassenger(ticketRequest.getPassengerRequest());
         Card card = cardService.createCard(ticketRequest.getCardRequest());
         Flight flight = flightService.getFlightById(ticketRequest.getFlightId());
-
-//        flight.setCapacity(flight.getCapacity()-1);
-//        flightService.createFlight(flight);
 
         return ticketRepository.save(Ticket.builder()
                 .price(ticketRequest.getTicketPrice())
@@ -84,7 +88,6 @@ public class TicketService {
                 .departureDateTime(flight.getDepartureDateTime())
                 .departureAirportName(flight.getRoute().getDepartureAirport().getName())
                 .arrivalAirportName(flight.getRoute().getArrivalAirport().getName())
-                .occupancy(flight.getOccupancy())
                 .capacity(flight.getCapacity())
                 .build();
 
