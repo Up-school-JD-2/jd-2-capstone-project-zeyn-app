@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CardRequest {
     private String cardNumber;
+    //@DateTimeFormat(pattern = "MM/yyyy") // Define the desired date pattern
     private String expirationDate;
     private String cvv;
 }
