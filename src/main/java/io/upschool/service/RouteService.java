@@ -7,6 +7,7 @@ import io.upschool.exceptions.RouteException;
 import io.upschool.model.Airport;
 import io.upschool.model.Route;
 import io.upschool.repository.RouteRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,18 +28,20 @@ public class RouteService {
                         .departureAirportName(route.getDepartureAirport().getName())
                         .build()).toList();
     }
-
+    @Transactional
     public RouteResponse createRoute(RouteRequest routeRequest) throws AirportException, RouteException {
         Airport arrivalAirport = airportService.getAirport(routeRequest.getArrivalAirportId());
         Airport departureAirport = airportService.getAirport(routeRequest.getDepartureAirportId());
 
+//        boolean condition = routeRepository.existsByArrivalAirportEqualsAndDepartureAirport_Name(arrivalAirport, departureAirport.getName());
+//        if(condition)
+//            throw new RouteException(RouteException.DEPARTURE_AND_ARRIVAL_AIRPORT_CANNOT_BE_THE_SAME);
         if (arrivalAirport.getName().equalsIgnoreCase(departureAirport.getName()))
             throw new RouteException(RouteException.DEPARTURE_AND_ARRIVAL_AIRPORT_CANNOT_BE_THE_SAME);
 
-        List<Route> routeList = routeRepository.findAllByArrivalAirport_NameAndDepartureAirport_NameContainingIgnoreCase
-                (arrivalAirport.getName(), departureAirport.getName());
+        if(routeRepository.existsAllByArrivalAirport_NameAndDepartureAirport_Name(arrivalAirport.getName(), departureAirport.getName()))
+            throw new RouteException(RouteException.ROUTE_DUPLICATED_EXCEPTION);
 
-        if(routeList.size()!=0) throw new RouteException(RouteException.ROUTE_DUPLICATED_EXCEPTION);
 
         Route route = routeRepository.save(Route.builder()
                 .arrivalAirport(arrivalAirport)
