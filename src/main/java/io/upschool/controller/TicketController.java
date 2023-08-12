@@ -28,6 +28,10 @@ public class TicketController {
     public ResponseEntity<TicketResponse> getTicketByTicketNumber(@RequestParam("ticketNumber") String ticketNumber) {
         return ResponseEntity.ok(ticketService.getTicketByTicketNumber(ticketNumber));
     }
+    @GetMapping("/searchByIdentityNumber")
+    public ResponseEntity<List<TicketResponse>> getTicketByIdentityNumber(@RequestParam("identityNumber") String identityNumber) {
+        return ResponseEntity.ok(ticketService.getTicketByIdentityNumber(identityNumber));
+    }
 
     @PostMapping
     public ResponseEntity<TicketResponse> createTicket(@Valid @RequestBody TicketRequest ticketRequest) throws FlightException, CardNumberException, PassengerException {

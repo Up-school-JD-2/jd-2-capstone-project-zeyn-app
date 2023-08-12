@@ -18,11 +18,13 @@ public class PassengerService {
         if (!passengerRequest.getIdentityNumber().matches("\\d+")) {
             throw new PassengerException(PassengerException.IDENTITY_NUMBER_CANNOT_CONTAIN_CHARACTER);
         }
-        if(passengerRepository.existsByIdentityNumber(passengerRequest.getIdentityNumber()))
-            throw new PassengerException(PassengerException.IDENTITY_NUMBER_EXIST);
+        if(passengerRepository.existsByIdentityNumber(passengerRequest.getIdentityNumber())){
+            return passengerRepository.findByIdentityNumber(passengerRequest.getIdentityNumber());
+        }
+            //throw new PassengerException(PassengerException.IDENTITY_NUMBER_EXIST);
 
-        if(passengerRepository.existsByEmailAddress(passengerRequest.getEmailAddress()))
-            throw new PassengerException(PassengerException.EMAIL_ADDRESS_EXIST);
+//        if(passengerRepository.existsByEmailAddress(passengerRequest.getEmailAddress()))
+//            throw new PassengerException(PassengerException.EMAIL_ADDRESS_EXIST);
 
         return passengerRepository.save(Passenger.builder()
                 .name(passengerRequest.getName())

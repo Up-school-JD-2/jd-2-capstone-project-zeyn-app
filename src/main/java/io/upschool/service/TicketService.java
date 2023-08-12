@@ -34,6 +34,12 @@ public class TicketService {
     public TicketResponse getTicketByTicketNumber(String ticketNumber) {
         return entityToResponse(ticketRepository.findByTicketNumber(ticketNumber));
     }
+    public List<TicketResponse> getTicketByIdentityNumber(String identityNumber) {
+        return ticketRepository.findByPassengerIdentityNumber(identityNumber)
+                .stream()
+                .map(this::entityToResponse)
+                .toList();
+    }
 
     @Transactional
     public TicketResponse createTicket(TicketRequest ticketRequest) throws FlightException, CardNumberException, PassengerException {
@@ -42,7 +48,7 @@ public class TicketService {
         Flight flight = flightService.updateFlightCapacity(ticket.getFlight(), capacity);
 
         ticket.setFlight(flight);
-        ticketRepository.save(ticket);
+        ticketRepository.save(ticket);//update
         return entityToResponse(ticket);
     }
 
@@ -64,14 +70,13 @@ public class TicketService {
         Flight flight = flightService.getFlightById(ticketRequest.getFlightId());
 
         return ticketRepository.save(Ticket.builder()
-                .price(ticketRequest.getTicketPrice())
                 .flight(flight)
                 .card(card)
                 .passenger(passenger)
                 .isActive(true)
                 .build());
     }
-
+    @Transactional
     private TicketResponse entityToResponse(Ticket ticket) {
         Card card = ticket.getCard();
         Passenger passenger = ticket.getPassenger();
@@ -89,11 +94,12 @@ public class TicketService {
                 .departureAirportName(flight.getRoute().getDepartureAirport().getName())
                 .arrivalAirportName(flight.getRoute().getArrivalAirport().getName())
                 .capacity(flight.getCapacity())
+                .price(flight.getPrice())
                 .build();
 
         return TicketResponse.builder()
                 .ticketNumber(ticket.getTicketNumber())
-                .ticketPrice(ticket.getPrice())
+                .ticketPrice(flight.getPrice())
                 .ticketFlightResponse(ticketFlightResponse)
                 .cardResponse(cardResponse)
                 .passengerResponse(passengerResponse)
