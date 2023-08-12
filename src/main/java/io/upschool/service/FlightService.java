@@ -23,10 +23,11 @@ public class FlightService {
         return flightRepository.findAll().stream().map(flight -> FlightResponse.builder()
                 .id(flight.getId())
                 .companyName(flight.getAirlineCompany().getName())
-                        .departureDateTime(flight.getDepartureDateTime())
-                        .arrivalAirportName(flight.getRoute().getArrivalAirport().getName())
-                        .departureAirportName(flight.getRoute().getDepartureAirport().getName())
-                        .capacity(flight.getCapacity())
+                .departureDateTime(flight.getDepartureDateTime())
+                .arrivalAirportName(flight.getRoute().getArrivalAirport().getName())
+                .departureAirportName(flight.getRoute().getDepartureAirport().getName())
+                .capacity(flight.getCapacity())
+                .price(flight.getPrice())
                 .build()).toList();
     }
 
@@ -34,6 +35,7 @@ public class FlightService {
         List<Flight> flights = flightRepository.findAllByAirlineCompany_Id(airlineCompanyId);
         return flights.stream().map(this::flightEntityToFlightResponse).toList();
     }
+
     public List<AirlineFlightResponse> getAllFlightsByRoute(String departureCity, String arrivalCity) {
         List<Flight> flights = flightRepository.findAllByRouteDepartureAirportLocationAndRouteArrivalAirportLocation(departureCity, arrivalCity);
         return flights.stream().map(this::flightEntityToFlightResponse).toList();
@@ -41,9 +43,10 @@ public class FlightService {
 
     public List<AirlineFlightResponse> getAllFlightsByRouteAndAirlineId(String departureCity, String arrivalCity, Long companyId) {
         List<Flight> flights = flightRepository.findAllByRouteDepartureAirportLocationAndRouteArrivalAirportLocationAndAirlineCompanyId(departureCity, arrivalCity, companyId);
-        //List<Flight> flights = flightRepository.findAllByRouteDepartureAirportLocationAndRouteArrivalAirportLocation(departureCity, arrivalCity);
-        //flights.get(0).getAirlineCompany().getId()
-        return flights.stream().map(this::flightEntityToFlightResponse).toList();
+        return flights
+                .stream()
+                .map(this::flightEntityToFlightResponse)
+                .toList();
     }
 
     public Flight getFlightById(Long id) throws FlightException {
@@ -56,7 +59,7 @@ public class FlightService {
     }
 
     @Transactional
-    public Flight updateFlightCapacity(Flight flight, int updatedCapacity){
+    public Flight updateFlightCapacity(Flight flight, int updatedCapacity) {
         flight.setCapacity(updatedCapacity);
         return flightRepository.save(flight);
     }
@@ -68,14 +71,17 @@ public class FlightService {
                 .departureDateTime(flight.getDepartureDateTime())
                 .arrivalAirportName(flight.getRoute().getArrivalAirport().getName())
                 .departureAirportName(flight.getRoute().getDepartureAirport().getName())
+                .price(flight.getPrice())
                 .build();
     }
+
     @Transactional
     private Flight flightRequestToFlight(FlightRequest flightRequest, AirlineCompany airlineCompany, Route route) {
         return flightRepository.save(Flight.builder()
                 .airlineCompany(airlineCompany)
                 .route(route)
                 .departureDateTime(flightRequest.getDepartureDateTime())
+                .price(flightRequest.getPrice())
                 .build());
     }
 }

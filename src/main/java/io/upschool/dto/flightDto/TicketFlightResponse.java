@@ -16,4 +16,5 @@ public class TicketFlightResponse {
     private String departureAirportName;
     private String arrivalAirportName;
     private Integer capacity;
+    private Double price;
 }

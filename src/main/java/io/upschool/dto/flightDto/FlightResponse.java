@@ -24,4 +24,5 @@ public class FlightResponse {
     private String departureAirportName;
     @JsonProperty(value = "arrival")
     private String arrivalAirportName;
+    private Double price;
 }

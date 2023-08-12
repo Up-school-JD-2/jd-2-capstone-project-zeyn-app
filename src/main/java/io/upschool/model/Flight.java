@@ -31,4 +31,5 @@ public class Flight {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable=false)
     private AirlineCompany airlineCompany;
+    private Double price;
 }

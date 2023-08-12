@@ -14,4 +14,5 @@ import java.time.LocalDateTime;
 public class AirlineFlightRequest {
     private LocalDateTime departureDateTime; // 2023-08-05T10:15:30
     private Long routeId;
+    private Double price;
 }

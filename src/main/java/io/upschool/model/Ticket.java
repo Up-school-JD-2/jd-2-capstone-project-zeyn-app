@@ -22,7 +22,6 @@ public class Ticket {
     private Long id;
     @Builder.Default
     private String ticketNumber  = UUID.randomUUID().toString().toUpperCase();
-    private Double price;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "flight_id", nullable=false)
     private Flight flight;
