@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompanyFlightRequest {
+public class AirlineFlightRequest {
     private LocalDateTime departureDateTime; // 2023-08-05T10:15:30
     private Long routeId;
 }

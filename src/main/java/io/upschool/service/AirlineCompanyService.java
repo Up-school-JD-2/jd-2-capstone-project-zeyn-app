@@ -2,9 +2,9 @@ package io.upschool.service;
 
 import io.upschool.dto.airlineCompanyDto.AirlineCompanyRequest;
 import io.upschool.dto.airlineCompanyDto.AirlineCompanyResponse;
-import io.upschool.dto.flightDto.CompanyFlightRequest;
+import io.upschool.dto.flightDto.AirlineFlightRequest;
+import io.upschool.dto.flightDto.AirlineFlightResponse;
 import io.upschool.dto.flightDto.FlightRequest;
-import io.upschool.dto.flightDto.FlightResponse;
 import io.upschool.exceptions.AirlineCompanyException;
 import io.upschool.exceptions.RouteException;
 import io.upschool.model.AirlineCompany;
@@ -38,41 +38,41 @@ public class AirlineCompanyService {
                 .toList();
     }
 
-    public List<FlightResponse> getAllFlightsByAirlineCompanyId(Long id) throws AirlineCompanyException {
+    public List<AirlineFlightResponse> getAllFlightsByAirlineCompanyId(Long id) throws AirlineCompanyException {
         AirlineCompany airlineCompany = airlineCompanyRepository.findById(id)
                 .orElseThrow(() -> new AirlineCompanyException(AirlineCompanyException.DATA_NOT_FOUND));
         return flightService.getAllFlightsByAirlineCompanyId(airlineCompany.getId());
     }
 
-    public List<FlightResponse> getAllFlightsByRoutes(String departureCity, String arrivalCity) {
+    public List<AirlineFlightResponse> getAllFlightsByRoutes(String departureCity, String arrivalCity) {
         return flightService.getAllFlightsByRoute(departureCity, arrivalCity);
     }
 
-    public List<FlightResponse> getAllFlightsByRoutesAndByAirlineId(Long id, String departureCity, String arrivalCity) throws AirlineCompanyException {
-        AirlineCompany airlineCompany = airlineCompanyRepository.findById(id)
+    public List<AirlineFlightResponse> getAllFlightsByRoutesAndByAirlineId(Long companyId, String departureCity, String arrivalCity) throws AirlineCompanyException {
+        AirlineCompany airlineCompany = airlineCompanyRepository.findById(companyId)
                 .orElseThrow(() -> new AirlineCompanyException(AirlineCompanyException.DATA_NOT_FOUND));
 
-        return flightService.getAllFlightsByRoute(departureCity, arrivalCity).stream()
-                .filter(flightResponse ->
-                        airlineCompany.getId().equals(flightResponse.getAirlineCompanyId())).toList();
-//        return flightService.getAllFlightsByRouteAndAirlineCompanyId(airlineCompany.getId(), departureCity, arrivalCity);
+//        return flightService.getAllFlightsByRoute(departureCity, arrivalCity)
+//                .stream()
+//                .filter(flightResponse -> flightService.getAllFlightsByAirlineCompanyId(airlineCompany.getId())).toList();
+        return flightService.getAllFlightsByRouteAndAirlineId(departureCity, arrivalCity, airlineCompany.getId());
     }
 
-    public AirlineCompanyResponse createAirlineCompany(AirlineCompanyRequest airlineCompanyRequest) throws AirlineCompanyException {
+    public AirlineCompanyResponse createAirlineCompany(AirlineCompanyRequest airlineCompanyRequest){
         AirlineCompany airlineCompany = requestToEntity(airlineCompanyRequest);
         return entityToResponse(airlineCompany);
     }
 
-    public FlightResponse createFlightOnAirlineCompany(Long id, CompanyFlightRequest companyFlightRequest) throws AirlineCompanyException, RouteException {
+    public AirlineFlightResponse createFlightOnAirlineCompany(Long id, AirlineFlightRequest airlineFlightRequest) throws AirlineCompanyException, RouteException {
         AirlineCompany airlineCompany = airlineCompanyRepository.findById(id)
                 .orElseThrow(() -> new AirlineCompanyException(AirlineCompanyException.DATA_NOT_FOUND));
 
-        Route route = routeService.getRoute(companyFlightRequest.getRouteId());
+        Route route = routeService.getRoute(airlineFlightRequest.getRouteId());
         return flightService.createFlight(airlineCompany, route,
                 FlightRequest.builder()
                         .routeId(route.getId())
                         .airlineCompanyId(airlineCompany.getId())
-                        .departureDateTime(companyFlightRequest.getDepartureDateTime())
+                        .departureDateTime(airlineFlightRequest.getDepartureDateTime())
                         .build());
     }
 

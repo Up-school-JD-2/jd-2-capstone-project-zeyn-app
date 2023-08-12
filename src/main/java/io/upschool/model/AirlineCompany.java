@@ -21,7 +21,7 @@ public class AirlineCompany {
     @Column(nullable = false)
     private String name;
     @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
-            flags = Pattern.Flag.CASE_INSENSITIVE)
+            flags = Pattern.Flag.CASE_INSENSITIVE, message = "Email must be a well-formed email address")
     private String emailAddress;
     private String phoneNumber;
 }
