@@ -1,5 +1,6 @@
 package io.upschool.service;
 
+import io.upschool.dto.flightDto.AirlineFlightResponse;
 import io.upschool.dto.flightDto.FlightRequest;
 import io.upschool.dto.flightDto.FlightResponse;
 import io.upschool.exceptions.FlightException;
@@ -19,27 +20,37 @@ public class FlightService {
     private final FlightRepository flightRepository;
 
     public List<FlightResponse> getAllFlights() {
-        return flightRepository.findAll().stream().map(this::flightEntityToFlightResponse).toList();
+        return flightRepository.findAll().stream().map(flight -> FlightResponse.builder()
+                .id(flight.getId())
+                .companyName(flight.getAirlineCompany().getName())
+                        .departureDateTime(flight.getDepartureDateTime())
+                        .arrivalAirportName(flight.getRoute().getArrivalAirport().getName())
+                        .departureAirportName(flight.getRoute().getDepartureAirport().getName())
+                        .capacity(flight.getCapacity())
+                .build()).toList();
     }
 
-    public List<FlightResponse> getAllFlightsByAirlineCompanyId(Long airlineCompanyId) {
+    public List<AirlineFlightResponse> getAllFlightsByAirlineCompanyId(Long airlineCompanyId) {
         List<Flight> flights = flightRepository.findAllByAirlineCompany_Id(airlineCompanyId);
         return flights.stream().map(this::flightEntityToFlightResponse).toList();
     }
+    public List<AirlineFlightResponse> getAllFlightsByRoute(String departureCity, String arrivalCity) {
+        List<Flight> flights = flightRepository.findAllByRouteDepartureAirportLocationAndRouteArrivalAirportLocation(departureCity, arrivalCity);
+        return flights.stream().map(this::flightEntityToFlightResponse).toList();
+    }
 
-    public List<FlightResponse> getAllFlightsByRoute(String departureCity, String arrivalCity) {
-
-        List<Flight> flights = flightRepository.findAllByRouteDepartureAirportLocationAndRouteArrivalAirportLocation
-                (departureCity, arrivalCity);
-        return flights.stream()
-                .map(this::flightEntityToFlightResponse).toList();
+    public List<AirlineFlightResponse> getAllFlightsByRouteAndAirlineId(String departureCity, String arrivalCity, Long companyId) {
+        List<Flight> flights = flightRepository.findAllByRouteDepartureAirportLocationAndRouteArrivalAirportLocationAndAirlineCompanyId(departureCity, arrivalCity, companyId);
+        //List<Flight> flights = flightRepository.findAllByRouteDepartureAirportLocationAndRouteArrivalAirportLocation(departureCity, arrivalCity);
+        //flights.get(0).getAirlineCompany().getId()
+        return flights.stream().map(this::flightEntityToFlightResponse).toList();
     }
 
     public Flight getFlightById(Long id) throws FlightException {
         return flightRepository.findById(id).orElseThrow(() -> new FlightException(FlightException.DATA_NOT_FOUND));
     }
 
-    public FlightResponse createFlight(AirlineCompany airlineCompany, Route route, FlightRequest flightRequest) {
+    public AirlineFlightResponse createFlight(AirlineCompany airlineCompany, Route route, FlightRequest flightRequest) {
         Flight flight = flightRequestToFlight(flightRequest, airlineCompany, route);
         return flightEntityToFlightResponse(flight);
     }
@@ -51,14 +62,12 @@ public class FlightService {
     }
 
 
-    private FlightResponse flightEntityToFlightResponse(Flight flight) {
-        return FlightResponse.builder()
-                .id(flight.getId())
-                .capacity(flight.getCapacity())
+    private AirlineFlightResponse flightEntityToFlightResponse(Flight flight) {
+        return AirlineFlightResponse.builder()
+                .companyName(flight.getAirlineCompany().getName())
                 .departureDateTime(flight.getDepartureDateTime())
                 .arrivalAirportName(flight.getRoute().getArrivalAirport().getName())
                 .departureAirportName(flight.getRoute().getDepartureAirport().getName())
-                .airlineCompanyId(flight.getAirlineCompany().getId())
                 .build();
     }
     @Transactional
