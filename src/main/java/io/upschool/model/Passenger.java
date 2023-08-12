@@ -24,7 +24,7 @@ public class Passenger {
     @Size(min = 11, max = 11, message = "Identity number must be 11 characters long")
     private String identityNumber; //11 karakter
     @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
-            flags = Pattern.Flag.CASE_INSENSITIVE)
+            flags = Pattern.Flag.CASE_INSENSITIVE, message = "Email must be a well-formed email address")
     @Column(nullable = false)
     private String emailAddress;
     private String phoneNumber;

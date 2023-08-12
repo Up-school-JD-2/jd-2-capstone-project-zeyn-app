@@ -24,7 +24,6 @@ public class PassengerService {
         if(passengerRepository.existsByEmailAddress(passengerRequest.getEmailAddress()))
             throw new PassengerException(PassengerException.EMAIL_ADDRESS_EXIST);
 
-
         return passengerRepository.save(Passenger.builder()
                 .name(passengerRequest.getName())
                 .surname(passengerRequest.getSurname())
