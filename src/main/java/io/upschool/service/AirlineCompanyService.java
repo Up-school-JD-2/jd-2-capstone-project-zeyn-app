@@ -58,7 +58,7 @@ public class AirlineCompanyService {
         return flightService.getAllFlightsByRouteAndAirlineId(departureCity, arrivalCity, airlineCompany.getId());
     }
 
-    public AirlineCompanyResponse createAirlineCompany(AirlineCompanyRequest airlineCompanyRequest){
+    public AirlineCompanyResponse createAirlineCompany(AirlineCompanyRequest airlineCompanyRequest) throws AirlineCompanyException {
         AirlineCompany airlineCompany = requestToEntity(airlineCompanyRequest);
         return entityToResponse(airlineCompany);
     }
@@ -73,6 +73,7 @@ public class AirlineCompanyService {
                         .routeId(route.getId())
                         .airlineCompanyId(airlineCompany.getId())
                         .departureDateTime(airlineFlightRequest.getDepartureDateTime())
+                        .price(airlineFlightRequest.getPrice())
                         .build());
     }
 
@@ -86,9 +87,9 @@ public class AirlineCompanyService {
     }
 
     @Transactional
-    private AirlineCompany requestToEntity(AirlineCompanyRequest airlineCompanyRequest) {
-//        if(airlineCompanyRepository.existsByEmailAddress(airlineCompanyRequest.getEmailAddress()))
-//            throw new AirlineCompanyException(AirlineCompanyException.EMAIL_ADDRESS_EXIST);
+    private AirlineCompany requestToEntity(AirlineCompanyRequest airlineCompanyRequest) throws AirlineCompanyException {
+        if(airlineCompanyRepository.existsByName(airlineCompanyRequest.getName()))
+            throw new AirlineCompanyException(AirlineCompanyException.AIRLINE_COMPANY_EXIST);
         return airlineCompanyRepository.save(AirlineCompany.builder()
                 .name(airlineCompanyRequest.getName())
                 .emailAddress(airlineCompanyRequest.getEmailAddress())

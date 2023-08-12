@@ -54,21 +54,19 @@ public class AirlineCompanyController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createAirlineCompany(@Valid @RequestBody AirlineCompanyRequest airlineCompanyRequest) {
-        //return ResponseEntity.ok(airlineCompanyService.createAirlineCompany(airlineCompanyRequest));
-
+    public ResponseEntity<Object> createAirlineCompany(@Valid @RequestBody AirlineCompanyRequest airlineCompanyRequest) throws AirlineCompanyException {
         AirlineCompanyResponse airlineCompany = airlineCompanyService.createAirlineCompany(airlineCompanyRequest);
         var response = BaseResponse.<AirlineCompanyResponse>builder()
                 .status(HttpStatus.CREATED.value())
                 .isSuccess(true)
                 .data(airlineCompany)
                 .build();
-
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/createFligth/{id}")
-    public ResponseEntity<AirlineFlightResponse> createFlightOnAirlineCompany(@Valid @PathVariable("id") Long id, @RequestBody AirlineFlightRequest airlineFlightRequest) throws AirlineCompanyException, RouteException {
+    public ResponseEntity<AirlineFlightResponse> createFlightOnAirlineCompany(@Valid @PathVariable("id") Long id,
+                                                                              @RequestBody AirlineFlightRequest airlineFlightRequest) throws AirlineCompanyException, RouteException {
         return ResponseEntity.ok(airlineCompanyService.createFlightOnAirlineCompany(id, airlineFlightRequest));
     }
 }
