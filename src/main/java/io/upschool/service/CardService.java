@@ -29,7 +29,7 @@ public class CardService {
         if (length != 16)
             throw new CardNumberException(CardNumberException.INVALID_CARD_NUMBER_EXCEPTION);
 
-        String maskedPart = cleanedCardNumber.substring(6, length - 4).replaceAll("", "*");
+        String maskedPart = cleanedCardNumber.substring(6, length - 4).replaceAll(".", "*");
         return cleanedCardNumber.substring(0, 6) + maskedPart + cleanedCardNumber.substring(length - 4);
     }
 }
