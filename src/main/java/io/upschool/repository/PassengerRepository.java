@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PassengerRepository extends JpaRepository<Passenger, Long> {
-    boolean existsByIdentityNumber(String identityNumber);
+    boolean existsByIdentityNumberAndEmailAddress(String identityNumber, String emailAddress);
     Passenger findByIdentityNumber(String s);
 }
