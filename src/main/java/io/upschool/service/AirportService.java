@@ -19,46 +19,43 @@ public class AirportService {
     public List<AirportResponse> getAllAirports() {
         return airportRepository.findAll()
                 .stream()
-                .map(airport -> AirportResponse.builder()
-                        .id(airport.getId())
-                        .name(airport.getName())
-                        .location(airport.getLocation())
-                        .build()).toList();
+                .map(AirportService::getAirportResponse).toList();
     }
 
     @Transactional
-    public AirportResponse createAirport(AirportRequest airportRequest) throws AirportException {
-        List<Airport> airportList = airportRepository.findByNameAndLocationContainingIgnoreCase
-                (airportRequest.getName(), airportRequest.getLocation());
-
-        if (airportList.size() != 0) throw new AirportException(AirportException.AIRPORT_EXIST);
-
-        Airport airport = airportRepository.save(
-                Airport.builder()
-                        .name(airportRequest.getName())
-                        .location(airportRequest.getLocation())
-                        .isActive(true)
-                        .build());
-
-        return AirportResponse
-                .builder()
-                .id(airport.getId())
-                .name(airport.getName())
-                .location(airport.getLocation()).build();
+    public AirportResponse createAirport(AirportRequest airportRequest) {
+        checkIfExist(airportRequest);
+        Airport airport = airportRepository.save(getAirport(airportRequest));
+        return getAirportResponse(airport);
     }
 
     public List<AirportResponse> findAirportByName(String name) {
         List<Airport> airportList = airportRepository.findAirportByNameContainingIgnoreCase(name);
-
-        return airportList.stream().map(airport ->
-                AirportResponse.builder()
-                        .id(airport.getId())
-                        .name(airport.getName())
-                        .location(airport.getLocation())
-                        .build()).toList();
+        return airportList.stream().map(AirportService::getAirportResponse).toList();
     }
 
     public Airport getAirport(Long airportId) throws AirportException {
         return airportRepository.findById(airportId).orElseThrow(() -> new AirportException(AirportException.DATA_NOT_FOUND));
+    }
+
+    private static Airport getAirport(AirportRequest airportRequest) {
+        return Airport.builder()
+                .name(airportRequest.getName())
+                .location(airportRequest.getLocation())
+                .isActive(true)
+                .build();
+    }
+
+    private static AirportResponse getAirportResponse(Airport airport) {
+        return AirportResponse.builder()
+                .id(airport.getId())
+                .name(airport.getName())
+                .location(airport.getLocation())
+                .build();
+    }
+
+    private void checkIfExist(AirportRequest airportRequest) {
+        boolean exist = airportRepository.existsByNameAndLocationContainingIgnoreCase(airportRequest.getName(), airportRequest.getLocation());
+        if (exist) throw new AirportException(AirportException.AIRPORT_EXIST);
     }
 }
