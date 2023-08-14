@@ -13,16 +13,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FlightResponse {
-    @JsonProperty(value = "flight_id")
     private Long id;
-    private Integer capacity;
+    private Double price;
     @JsonProperty(value = "Airline")
     private String companyName;
     @JsonProperty(value = "Date")
     private LocalDateTime departureDateTime;
-    @JsonProperty(value = "departure")
+    @JsonProperty(value = "Departure Airport")
     private String departureAirportName;
-    @JsonProperty(value = "arrival")
+    @JsonProperty(value = "Arrival Airport")
     private String arrivalAirportName;
-    private Double price;
+    @JsonProperty(value = "capacity")
+    private Integer capacity;
 }
