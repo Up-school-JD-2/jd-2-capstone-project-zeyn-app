@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AirlineFlightResponse {
+    private Long id;
     @JsonProperty(value = "Airline")
     private String companyName;
     @JsonProperty(value = "Date")
