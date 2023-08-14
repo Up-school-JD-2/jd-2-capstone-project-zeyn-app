@@ -1,6 +1,6 @@
 package io.upschool.repository;
 
-import io.upschool.model.Route;
+import io.upschool.entity.Route;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

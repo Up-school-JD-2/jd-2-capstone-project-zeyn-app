@@ -2,8 +2,8 @@ package io.upschool.service;
 
 import io.upschool.dto.cardDto.CardRequest;
 import io.upschool.dto.cardDto.CardResponse;
+import io.upschool.entity.Card;
 import io.upschool.exceptions.CardException;
-import io.upschool.model.Card;
 import io.upschool.repository.CardRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

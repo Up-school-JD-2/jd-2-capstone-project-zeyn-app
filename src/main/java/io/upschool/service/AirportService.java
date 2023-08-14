@@ -3,7 +3,7 @@ package io.upschool.service;
 import io.upschool.dto.airportDto.AirportRequest;
 import io.upschool.dto.airportDto.AirportResponse;
 import io.upschool.exceptions.AirportException;
-import io.upschool.model.Airport;
+import io.upschool.entity.Airport;
 import io.upschool.repository.AirportRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

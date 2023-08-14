@@ -1,6 +1,6 @@
 package io.upschool.repository;
 
-import io.upschool.model.Card;
+import io.upschool.entity.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

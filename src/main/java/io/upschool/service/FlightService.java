@@ -4,9 +4,9 @@ import io.upschool.dto.flightDto.AirlineFlightResponse;
 import io.upschool.dto.flightDto.FlightRequest;
 import io.upschool.dto.flightDto.FlightResponse;
 import io.upschool.exceptions.FlightException;
-import io.upschool.model.AirlineCompany;
-import io.upschool.model.Flight;
-import io.upschool.model.Route;
+import io.upschool.entity.AirlineCompany;
+import io.upschool.entity.Flight;
+import io.upschool.entity.Route;
 import io.upschool.repository.FlightRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -49,14 +49,14 @@ public class FlightService {
 
     @Transactional
     public Flight increaseFlightCapacity(Flight flight) {
-        Integer capacity = flight.getCapacity() - 1;
+        Integer capacity = flight.getCapacity() + 1;
         flight.setCapacity(capacity);
         return flightRepository.save(flight);
     }
 
     @Transactional
     public Flight decreaseFlightCapacity(Flight flight) {
-        Integer capacity = flight.getCapacity() + 1;
+        Integer capacity = flight.getCapacity() - 1;
         flight.setCapacity(capacity);
         return flightRepository.save(flight);
     }

@@ -1,6 +1,6 @@
 package io.upschool.repository;
 
-import io.upschool.model.Ticket;
+import io.upschool.entity.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
