@@ -2,7 +2,6 @@ package io.upschool.service;
 
 import io.upschool.dto.routeDto.RouteRequest;
 import io.upschool.dto.routeDto.RouteResponse;
-import io.upschool.exceptions.AirportException;
 import io.upschool.exceptions.RouteException;
 import io.upschool.model.Airport;
 import io.upschool.model.Route;
@@ -21,34 +20,26 @@ public class RouteService {
 
     public List<RouteResponse> getAllRoutes() {
         List<Route> routeList = routeRepository.findAll();
-        return routeList.stream().map(route ->
-                RouteResponse.builder()
-                        .id(route.getId())
-                        .arrivalAirportName(route.getArrivalAirport().getName())
-                        .departureAirportName(route.getDepartureAirport().getName())
-                        .build()).toList();
+        return routeList.stream().map(RouteService::getRouteResponse).toList();
     }
+
     @Transactional
-    public RouteResponse createRoute(RouteRequest routeRequest) throws AirportException, RouteException {
+    public RouteResponse createRoute(RouteRequest routeRequest) {
         Airport arrivalAirport = airportService.getAirport(routeRequest.getArrivalAirportId());
         Airport departureAirport = airportService.getAirport(routeRequest.getDepartureAirportId());
 
-//        boolean condition = routeRepository.existsByArrivalAirportEqualsAndDepartureAirport_Name(arrivalAirport, departureAirport.getName());
-//        if(condition)
-//            throw new RouteException(RouteException.DEPARTURE_AND_ARRIVAL_AIRPORT_CANNOT_BE_THE_SAME);
-        if (arrivalAirport.getName().equalsIgnoreCase(departureAirport.getName()))
-            throw new RouteException(RouteException.DEPARTURE_AND_ARRIVAL_AIRPORT_CANNOT_BE_THE_SAME);
+        checkIfAirportsSame(arrivalAirport, departureAirport);
+        checkIfExist(arrivalAirport, departureAirport);
 
-        if(routeRepository.existsAllByArrivalAirport_NameAndDepartureAirport_Name(arrivalAirport.getName(), departureAirport.getName()))
-            throw new RouteException(RouteException.ROUTE_DUPLICATED_EXCEPTION);
+        Route route = routeRepository.save(getRoute(arrivalAirport, departureAirport));
+        return getResponse(route);
+    }
 
+    public Route getRoute(Long routeId) throws RouteException {
+        return routeRepository.findById(routeId).orElseThrow(() -> new RouteException(RouteException.DATA_NOT_FOUND));
+    }
 
-        Route route = routeRepository.save(Route.builder()
-                .arrivalAirport(arrivalAirport)
-                .departureAirport(departureAirport)
-                .isActive(true)
-                .build());
-
+    private static RouteResponse getResponse(Route route) {
         return RouteResponse.builder()
                 .id(route.getId())
                 .departureAirportName(route.getDepartureAirport().getName())
@@ -56,7 +47,29 @@ public class RouteService {
                 .build();
     }
 
-    public Route getRoute(Long routeId) throws RouteException {
-        return routeRepository.findById(routeId).orElseThrow(()-> new RouteException(RouteException.DATA_NOT_FOUND));
+    private static Route getRoute(Airport arrivalAirport, Airport departureAirport) {
+        return Route.builder()
+                .arrivalAirport(arrivalAirport)
+                .departureAirport(departureAirport)
+                .isActive(true)
+                .build();
+    }
+
+    private static RouteResponse getRouteResponse(Route route) {
+        return RouteResponse.builder()
+                .id(route.getId())
+                .arrivalAirportName(route.getArrivalAirport().getName())
+                .departureAirportName(route.getDepartureAirport().getName())
+                .build();
+    }
+
+    private void checkIfExist(Airport arrivalAirport, Airport departureAirport) {
+        if (routeRepository.existsAllByArrivalAirport_NameAndDepartureAirport_Name(arrivalAirport.getName(), departureAirport.getName()))
+            throw new RouteException(RouteException.ROUTE_DUPLICATED_EXCEPTION);
+    }
+
+    private static void checkIfAirportsSame(Airport arrivalAirport, Airport departureAirport) {
+        if (arrivalAirport.getName().equalsIgnoreCase(departureAirport.getName()))
+            throw new RouteException(RouteException.DEPARTURE_AND_ARRIVAL_AIRPORT_CANNOT_BE_THE_SAME);
     }
 }
