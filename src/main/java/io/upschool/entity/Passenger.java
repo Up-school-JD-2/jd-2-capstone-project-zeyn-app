@@ -1,4 +1,4 @@
-package io.upschool.model;
+package io.upschool.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -21,7 +21,6 @@ public class Passenger {
     private Long id;
     private String name;
     private String surname;
-
     @Size(min = 11, max = 11, message = "Identity number must be 11 characters long!")
     private String identityNumber;
     @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
@@ -29,4 +28,6 @@ public class Passenger {
     @Column(nullable = false)
     private String emailAddress;
     private String phoneNumber;
+    @Size(min=16, max=16)
+    private String cardNumber;
 }

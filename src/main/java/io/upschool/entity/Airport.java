@@ -1,4 +1,4 @@
-package io.upschool.model;
+package io.upschool.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,19 +7,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "routes")
-@Data
+@Table(name="airports")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Route {
+@Data
+public class Airport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Airport departureAirport;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable=false)
-    private Airport arrivalAirport;
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
+    private String location;
     private Boolean isActive;
 }

@@ -1,4 +1,4 @@
-package io.upschool.model;
+package io.upschool.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
