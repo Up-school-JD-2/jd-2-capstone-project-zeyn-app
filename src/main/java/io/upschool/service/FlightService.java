@@ -20,22 +20,22 @@ public class FlightService {
     private final FlightRepository flightRepository;
 
     public List<FlightResponse> getAllFlights() {
-        return flightRepository.findAll().stream().map(FlightService::getFlightResponse).toList();
+        return flightRepository.findAll().stream().map(this::getFlightResponse).toList();
     }
 
     public List<AirlineFlightResponse> getAllFlightsByAirlineCompanyId(Long airlineCompanyId) {
         List<Flight> flights = flightRepository.findAllByAirlineCompany_Id(airlineCompanyId);
-        return flights.stream().map(FlightService::getAirlineFlightResponse).toList();
+        return flights.stream().map(this::getAirlineFlightResponse).toList();
     }
 
     public List<AirlineFlightResponse> getAllFlightsByRoute(String departureCity, String arrivalCity) {
         List<Flight> flights = flightRepository.findAllByRouteDepartureAirportLocationAndRouteArrivalAirportLocation(departureCity, arrivalCity);
-        return flights.stream().map(FlightService::getAirlineFlightResponse).toList();
+        return flights.stream().map(this::getAirlineFlightResponse).toList();
     }
 
     public List<AirlineFlightResponse> getAllFlightsByRouteAndAirlineId(String departureCity, String arrivalCity, Long companyId) {
         List<Flight> flights = flightRepository.findAllByRouteDepartureAirportLocationAndRouteArrivalAirportLocationAndAirlineCompanyId(departureCity, arrivalCity, companyId);
-        return flights.stream().map(FlightService::getAirlineFlightResponse).toList();
+        return flights.stream().map(this::getAirlineFlightResponse).toList();
     }
 
     public Flight getFlightById(Long id) throws FlightException {
@@ -61,7 +61,6 @@ public class FlightService {
         return flightRepository.save(flight);
     }
 
-    @Transactional
     private Flight flightRequestToFlight(FlightRequest flightRequest, AirlineCompany airlineCompany, Route route) {
         return flightRepository.save(Flight.builder()
                 .airlineCompany(airlineCompany)
@@ -71,7 +70,7 @@ public class FlightService {
                 .build());
     }
 
-    private static FlightResponse getFlightResponse(Flight flight) {
+    private FlightResponse getFlightResponse(Flight flight) {
         return FlightResponse.builder()
                 .id(flight.getId())
                 .companyName(flight.getAirlineCompany().getName())
@@ -83,7 +82,7 @@ public class FlightService {
                 .build();
     }
 
-    private static AirlineFlightResponse getAirlineFlightResponse(Flight flight) {
+    private AirlineFlightResponse getAirlineFlightResponse(Flight flight) {
         return AirlineFlightResponse.builder()
                 .id(flight.getId())
                 .companyName(flight.getAirlineCompany().getName())

@@ -58,7 +58,6 @@ public class TicketService {
         ticketRepository.save(ticket);
     }
 
-    @Transactional
     private Ticket getTicket(TicketRequest ticketRequest) {
         Passenger passenger = passengerService.createPassenger(ticketRequest.getPassengerRequest());
         Card card = cardService.createCard(ticketRequest.getCardRequest());
@@ -72,7 +71,7 @@ public class TicketService {
                 .build());
     }
 
-    @Transactional
+
     private TicketResponse getTicketResponse(Ticket ticket) {
         Card card = ticket.getCard();
         Passenger passenger = ticket.getPassenger();

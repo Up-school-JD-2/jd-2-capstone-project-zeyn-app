@@ -19,7 +19,6 @@ public class Card {
     private Long id;
     @Size(min=16, max=16)
     private String cardNumber;
-    //@DateTimeFormat(pattern = "MM/yyyy") // Define the desired date pattern
     private String expirationDate;
     @Size(min = 3, max = 3)
     private String cvv;

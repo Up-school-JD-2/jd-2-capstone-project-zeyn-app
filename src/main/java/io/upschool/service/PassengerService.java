@@ -2,8 +2,8 @@ package io.upschool.service;
 
 import io.upschool.dto.passengerDto.PassengerRequest;
 import io.upschool.dto.passengerDto.PassengerResponse;
-import io.upschool.exceptions.PassengerException;
 import io.upschool.entity.Passenger;
+import io.upschool.exceptions.PassengerException;
 import io.upschool.repository.PassengerRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
