@@ -44,7 +44,7 @@ public class AirportController {
     public ResponseEntity<BaseResponse<AirportResponse>> createAirport(@Valid @RequestBody AirportRequest airportRequest){
         AirportResponse airport = airportService.createAirport(airportRequest);
         BaseResponse<AirportResponse> response = BaseResponse.<AirportResponse>builder()
-                .status(HttpStatus.OK.value())
+                .status(HttpStatus.CREATED.value())
                 .data(airport)
                 .isSuccess(true)
                 .build();
