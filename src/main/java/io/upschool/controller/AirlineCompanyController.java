@@ -3,10 +3,9 @@ package io.upschool.controller;
 import io.upschool.dto.BaseResponse;
 import io.upschool.dto.airlineCompanyDto.AirlineCompanyRequest;
 import io.upschool.dto.airlineCompanyDto.AirlineCompanyResponse;
-import io.upschool.dto.flightDto.AirlineFlightRequest;
+import io.upschool.dto.flightDto.FlightRequest;
 import io.upschool.dto.flightDto.AirlineFlightResponse;
 import io.upschool.exceptions.AirlineCompanyException;
-import io.upschool.exceptions.RouteException;
 import io.upschool.service.AirlineCompanyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,34 +22,65 @@ public class AirlineCompanyController {
     private final AirlineCompanyService airlineCompanyService;
 
     @GetMapping
-    public ResponseEntity<List<AirlineCompanyResponse>> getAllAirlineCompanies() {
-        return ResponseEntity.ok(airlineCompanyService.getAllAirlineCompanies());
+    public ResponseEntity<BaseResponse<List<AirlineCompanyResponse>>> getAllAirlineCompanies() {
+        List<AirlineCompanyResponse> airlineCompanyResponses = airlineCompanyService.getAllAirlineCompanies();
+        BaseResponse<List<AirlineCompanyResponse>> response = BaseResponse.<List<AirlineCompanyResponse>>builder()
+                .status(HttpStatus.OK.value())
+                .isSuccess(true)
+                .data(airlineCompanyResponses)
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/searchByName")
-    public ResponseEntity<List<AirlineCompanyResponse>> getAirlineCompaniesByName(@RequestParam("name") String name) {
-        return ResponseEntity.ok(airlineCompanyService.getAirlineCompaniesByName(name));
+    public ResponseEntity<BaseResponse<List<AirlineCompanyResponse>>> getAirlineCompaniesByName(@RequestParam("name") String name) {
+        List<AirlineCompanyResponse> airlineCompanyResponses = airlineCompanyService.getAirlineCompaniesByName(name);
+        BaseResponse<List<AirlineCompanyResponse>> baseResponse = BaseResponse.<List<AirlineCompanyResponse>>builder()
+                .status(HttpStatus.OK.value())
+                .isSuccess(true)
+                .data(airlineCompanyResponses)
+                .build();
+        return ResponseEntity.ok(baseResponse);
     }
 
     @GetMapping("/flights")
-    public ResponseEntity<List<AirlineFlightResponse>> getAllFlightsByAirlineCompanyId(@RequestParam("companyId") Long id) throws AirlineCompanyException {
-        return ResponseEntity.ok(airlineCompanyService.getAllFlightsByAirlineCompanyId(id));
-    }
+    public ResponseEntity<BaseResponse<List<AirlineFlightResponse>>> getAllFlightsByAirlineCompanyId(@RequestParam("companyId") Long id) throws AirlineCompanyException {
+        List<AirlineFlightResponse> flights = airlineCompanyService.getAllFlightsByAirlineCompanyId(id);
 
-    // localhost:8080/api/airlineCompanies/flights?from=departureCity&to=arrivalCity
+        BaseResponse<List<AirlineFlightResponse>> baseResponse = BaseResponse.<List<AirlineFlightResponse>>builder()
+                .status(HttpStatus.OK.value())
+                .isSuccess(true)
+                .data(flights)
+                .build();
+        return ResponseEntity.ok(baseResponse);
+    }
     @GetMapping("/route")
-    public ResponseEntity<List<AirlineFlightResponse>> getAllFlightsByRoutes(@RequestParam("from") String departureCity,
+    public ResponseEntity<BaseResponse<List<AirlineFlightResponse>>> getAllFlightsByRoutes(@RequestParam("from") String departureCity,
                                                                              @RequestParam("to") String arrivalCity) {
-        return ResponseEntity.ok(airlineCompanyService.getAllFlightsByRoutes(departureCity, arrivalCity));
+
+        List<AirlineFlightResponse> allFlightsByRoutes = airlineCompanyService.getAllFlightsByRoutes(departureCity, arrivalCity);
+        BaseResponse<List<AirlineFlightResponse>> baseResponse = BaseResponse.<List<AirlineFlightResponse>>builder()
+                .status(HttpStatus.OK.value())
+                .isSuccess(true)
+                .data(allFlightsByRoutes)
+                .build();
+        return ResponseEntity.ok(baseResponse);
     }
 
     @GetMapping("/routeAndCompanyId")
-    public ResponseEntity<List<AirlineFlightResponse>> getAllFlightsByRoutesAndByAirlineId
+    public ResponseEntity<BaseResponse<List<AirlineFlightResponse>> >getAllFlightsByRoutesAndByAirlineId
             (@RequestParam("id") Long companyId,
              @RequestParam("from") String departureCity,
              @RequestParam("to") String arrivalCity) throws AirlineCompanyException {
 
-        return ResponseEntity.ok(airlineCompanyService.getAllFlightsByRoutesAndByAirlineId(companyId, departureCity, arrivalCity));
+        List<AirlineFlightResponse> flightsByRoutesAndByAirlineId = airlineCompanyService.getAllFlightsByRoutesAndByAirlineId(companyId, departureCity, arrivalCity);
+        BaseResponse<List<AirlineFlightResponse>> baseResponse = BaseResponse.<List<AirlineFlightResponse>>builder()
+                .status(HttpStatus.OK.value())
+                .isSuccess(true)
+                .data(flightsByRoutesAndByAirlineId)
+                .build();
+        return ResponseEntity.ok(baseResponse);
+
     }
 
     @PostMapping
@@ -65,8 +95,14 @@ public class AirlineCompanyController {
     }
 
     @PostMapping("/createFligth/{id}")
-    public ResponseEntity<AirlineFlightResponse> createFlightOnAirlineCompany(@Valid @PathVariable("id") Long id,
-                                                                              @RequestBody AirlineFlightRequest airlineFlightRequest) throws AirlineCompanyException, RouteException {
-        return ResponseEntity.ok(airlineCompanyService.createFlightOnAirlineCompany(id, airlineFlightRequest));
+    public ResponseEntity<BaseResponse<AirlineFlightResponse>> createFlightOnAirlineCompany(@Valid @PathVariable("id") Long id,
+                                                                              @RequestBody FlightRequest airlineFlightRequest) {
+        AirlineFlightResponse flightResponse = airlineCompanyService.createFlightOnAirline(id, airlineFlightRequest);
+        BaseResponse<AirlineFlightResponse> response = BaseResponse.<AirlineFlightResponse>builder()
+                .status(HttpStatus.CREATED.value())
+                .isSuccess(true)
+                .data(flightResponse)
+                .build();
+        return ResponseEntity.ok(response);
     }
 }
