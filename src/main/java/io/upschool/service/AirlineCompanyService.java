@@ -36,7 +36,7 @@ public class AirlineCompanyService {
                 .toList();
     }
 
-    // findById kullanılmadan yapılabilir mi? Örneğin existById ile kontrol edilip, getReferenceById kullansam??
+    // findById kullanılmadan yapılabilir mi? Örneğin existById ile kontrol edip, getReferenceById kullansam??
     public List<AirlineFlightResponse> getAllFlightsByAirlineCompanyId(Long id) {
         AirlineCompany airlineCompany = airlineCompanyRepository.findById(id)
                 .orElseThrow(() -> new AirlineCompanyException(AirlineCompanyException.DATA_NOT_FOUND));
