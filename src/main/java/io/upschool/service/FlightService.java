@@ -48,9 +48,27 @@ public class FlightService {
     }
 
     @Transactional
-    public Flight updateFlightCapacity(Flight flight, int updatedCapacity) {
-        flight.setCapacity(updatedCapacity);
+    public Flight increaseFlightCapacity(Flight flight) {
+        Integer capacity = flight.getCapacity() - 1;
+        flight.setCapacity(capacity);
         return flightRepository.save(flight);
+    }
+
+    @Transactional
+    public Flight decreaseFlightCapacity(Flight flight) {
+        Integer capacity = flight.getCapacity() + 1;
+        flight.setCapacity(capacity);
+        return flightRepository.save(flight);
+    }
+
+    @Transactional
+    private Flight flightRequestToFlight(FlightRequest flightRequest, AirlineCompany airlineCompany, Route route) {
+        return flightRepository.save(Flight.builder()
+                .airlineCompany(airlineCompany)
+                .route(route)
+                .departureDateTime(flightRequest.getDepartureDateTime())
+                .price(flightRequest.getPrice())
+                .build());
     }
 
     private static FlightResponse getFlightResponse(Flight flight) {
@@ -74,15 +92,5 @@ public class FlightService {
                 .departureAirportName(flight.getRoute().getDepartureAirport().getName())
                 .price(flight.getPrice())
                 .build();
-    }
-
-    @Transactional
-    private Flight flightRequestToFlight(FlightRequest flightRequest, AirlineCompany airlineCompany, Route route) {
-        return flightRepository.save(Flight.builder()
-                .airlineCompany(airlineCompany)
-                .route(route)
-                .departureDateTime(flightRequest.getDepartureDateTime())
-                .price(flightRequest.getPrice())
-                .build());
     }
 }
