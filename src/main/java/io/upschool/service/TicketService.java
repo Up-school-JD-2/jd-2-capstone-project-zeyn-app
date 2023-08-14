@@ -5,9 +5,6 @@ import io.upschool.dto.flightDto.TicketFlightResponse;
 import io.upschool.dto.passengerDto.PassengerResponse;
 import io.upschool.dto.ticketDto.TicketRequest;
 import io.upschool.dto.ticketDto.TicketResponse;
-import io.upschool.exceptions.CardNumberException;
-import io.upschool.exceptions.FlightException;
-import io.upschool.exceptions.PassengerException;
 import io.upschool.model.Card;
 import io.upschool.model.Flight;
 import io.upschool.model.Passenger;
@@ -28,35 +25,33 @@ public class TicketService {
     private final TicketRepository ticketRepository;
 
     public List<TicketResponse> getAllTickets() {
-        return ticketRepository.findAll().stream().map(this::entityToResponse).toList();
+        return ticketRepository.findAll().stream().map(this::getTicketResponse).toList();
     }
 
     public TicketResponse getTicketByTicketNumber(String ticketNumber) {
-        return entityToResponse(ticketRepository.findByTicketNumber(ticketNumber));
+        Ticket ticket = ticketRepository.findByTicketNumber(ticketNumber);
+        return getTicketResponse(ticket);
     }
-    public List<TicketResponse> getTicketByIdentityNumber(String identityNumber) {
-        return ticketRepository.findByPassengerIdentityNumber(identityNumber)
-                .stream()
-                .map(this::entityToResponse)
-                .toList();
+
+    public TicketResponse getTicketByIdentityNumber(String identityNumber) {
+        Ticket ticket = ticketRepository.findByPassengerIdentityNumber(identityNumber);
+        return getTicketResponse(ticket);
     }
 
     @Transactional
-    public TicketResponse createTicket(TicketRequest ticketRequest) throws FlightException, CardNumberException, PassengerException {
-        Ticket ticket = requestToEntity(ticketRequest);
-        int capacity = ticket.getFlight().getCapacity() - 1;
-        Flight flight = flightService.updateFlightCapacity(ticket.getFlight(), capacity);
+    public TicketResponse createTicket(TicketRequest ticketRequest) {
+        Ticket ticket = getTicket(ticketRequest);
+        Flight flight = flightService.decreaseFlightCapacity(ticket.getFlight());
 
         ticket.setFlight(flight);
-        ticketRepository.save(ticket);//update
-        return entityToResponse(ticket);
+        ticketRepository.save(ticket);
+        return getTicketResponse(ticket);
     }
 
     @Transactional
-    public void cancelTicket(String ticketNumber){
+    public void cancelTicket(String ticketNumber) {
         Ticket ticket = ticketRepository.findByTicketNumber(ticketNumber);
-        int capacity = ticket.getFlight().getCapacity() + 1;
-        Flight flight = flightService.updateFlightCapacity(ticket.getFlight(), capacity);
+        Flight flight = flightService.increaseFlightCapacity(ticket.getFlight());
 
         ticket.setFlight(flight);
         ticket.setIsActive(false);
@@ -64,7 +59,7 @@ public class TicketService {
     }
 
     @Transactional
-    private Ticket requestToEntity(TicketRequest ticketRequest) throws FlightException, CardNumberException, PassengerException {
+    private Ticket getTicket(TicketRequest ticketRequest) {
         Passenger passenger = passengerService.createPassenger(ticketRequest.getPassengerRequest());
         Card card = cardService.createCard(ticketRequest.getCardRequest());
         Flight flight = flightService.getFlightById(ticketRequest.getFlightId());
@@ -76,26 +71,16 @@ public class TicketService {
                 .isActive(true)
                 .build());
     }
+
     @Transactional
-    private TicketResponse entityToResponse(Ticket ticket) {
+    private TicketResponse getTicketResponse(Ticket ticket) {
         Card card = ticket.getCard();
         Passenger passenger = ticket.getPassenger();
         Flight flight = ticket.getFlight();
 
-        CardResponse cardResponse = CardResponse.builder().cardNumber(card.getCardNumber()).build();
-        PassengerResponse passengerResponse = PassengerResponse.builder()
-                .id(passenger.getId())
-                .nameSurname(passenger.getName() + " " + passenger.getSurname())
-                .phoneNumber(passenger.getPhoneNumber())
-                .emailAddress(passenger.getEmailAddress())
-                .build();
-        TicketFlightResponse ticketFlightResponse = TicketFlightResponse.builder()
-                .departureDateTime(flight.getDepartureDateTime())
-                .departureAirportName(flight.getRoute().getDepartureAirport().getName())
-                .arrivalAirportName(flight.getRoute().getArrivalAirport().getName())
-                .capacity(flight.getCapacity())
-                .price(flight.getPrice())
-                .build();
+        CardResponse cardResponse = cardService.getCardResponse(card);
+        PassengerResponse passengerResponse = passengerService.getPassengerResponse(passenger);
+        TicketFlightResponse ticketFlightResponse = getTicketFlightResponse(flight);
 
         return TicketResponse.builder()
                 .ticketNumber(ticket.getTicketNumber())
@@ -103,6 +88,16 @@ public class TicketService {
                 .ticketFlightResponse(ticketFlightResponse)
                 .cardResponse(cardResponse)
                 .passengerResponse(passengerResponse)
+                .build();
+    }
+
+    private TicketFlightResponse getTicketFlightResponse(Flight flight) {
+        return TicketFlightResponse.builder()
+                .departureDateTime(flight.getDepartureDateTime())
+                .departureAirportName(flight.getRoute().getDepartureAirport().getName())
+                .arrivalAirportName(flight.getRoute().getArrivalAirport().getName())
+                .capacity(flight.getCapacity())
+                .price(flight.getPrice())
                 .build();
     }
 }
