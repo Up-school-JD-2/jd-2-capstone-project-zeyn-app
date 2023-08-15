@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -76,7 +77,7 @@ public class RouteService {
     }
 
     private void checkIfAirportsSame(Long arrivalAirportId, Long departureAirportId) {
-        if (arrivalAirportId==departureAirportId)
+        if (Objects.equals(arrivalAirportId, departureAirportId))
             throw new RouteException(RouteException.DEPARTURE_AND_ARRIVAL_AIRPORT_CANNOT_BE_THE_SAME);
     }
 }
