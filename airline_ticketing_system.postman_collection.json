@@ -1,0 +1,475 @@
+{
+	"info": {
+		"_postman_id": "71706ea8-5fd1-4a6b-809d-047d526d0956",
+		"name": "airline_ticketing_system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24251878"
+	},
+	"item": [
+		{
+			"name": "airport",
+			"item": [
+				{
+					"name": "create airports",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Adnan Menderes Havalimanı\",\r\n    \"location\": \"İzmir\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/airports",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get airports by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/airports/name?name=gsd",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airports",
+								"name"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "gsd"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get airports",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/airports",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airports"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "route",
+			"item": [
+				{
+					"name": "create routes",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"departureAirportId\": 2,\r\n    \"arrivalAirportId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/routes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"routes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get routes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/routes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"routes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "airline company",
+			"item": [
+				{
+					"name": "create airline companies",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pegasus\",\r\n    \"emailAddress\": \"thy@airlineInfo.com\",\r\n    \"phoneNumber\":\"78496525863\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/airlineCompanies",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airlineCompanies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create flight on airline company",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"price\": 900.85,\r\n    \"departureDateTime\": \"2023-08-10T10:15:30\",\r\n    \"routeId\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/airlineCompanies/createFligth/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airlineCompanies",
+								"createFligth",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get airline companies by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/airlineCompanies/searchByName?name=deneme",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airlineCompanies",
+								"searchByName"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "deneme"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get airline companies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/airlineCompanies",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airlineCompanies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get flights by companyId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/airlineCompanies/flights?companyId=2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airlineCompanies",
+								"flights"
+							],
+							"query": [
+								{
+									"key": "companyId",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get flights by route",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/airlineCompanies/route?from=İstanbul&to=Ankara",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airlineCompanies",
+								"route"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "İstanbul"
+								},
+								{
+									"key": "to",
+									"value": "Ankara"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get a company flight by route",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/airlineCompanies/routeAndCompanyId?id=2&from=İzmir&to=Ankara",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airlineCompanies",
+								"routeAndCompanyId"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								},
+								{
+									"key": "from",
+									"value": "İzmir"
+								},
+								{
+									"key": "to",
+									"value": "Ankara"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "flights",
+			"item": [
+				{
+					"name": "get all flights",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/flights",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"flights"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "tickets",
+			"item": [
+				{
+					"name": "create tickets",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"flightId\": 4,\r\n    \"passengerRequest\": {\r\n        \"name\": \"Zeynep\",\r\n        \"surname\": \"Özdemir\",\r\n        \"identityNumber\": \"12045678922\",\r\n        \"emailAddress\": \"zynp@gmail.com\",\r\n        \"phoneNumber\": \"05691234510\"\r\n    },\r\n    \"cardRequest\": {\r\n        \"cardNumber\": \"422,11611,2233,01\",\r\n        \"cvv\":\"123\",\r\n        \"expirationDate\": \"\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/tickets",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get ticket by identity number",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/tickets/search?ticketNumber=5C58-433B-BB05",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tickets",
+								"search"
+							],
+							"query": [
+								{
+									"key": "ticketNumber",
+									"value": "5C58-433B-BB05"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get tickets by ticket number",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "get tickets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/tickets",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "calcel ticket",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/tickets/cancel?ticketNumber=D60A385D-DE16-4917-9B00-218B33AD4872",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tickets",
+								"cancel"
+							],
+							"query": [
+								{
+									"key": "ticketNumber",
+									"value": "D60A385D-DE16-4917-9B00-218B33AD4872"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
