@@ -43,31 +43,16 @@ public class CardService {
 
     private Card getCard(CardRequest cardRequest) {
         String cardNumber = maskedCard(cardRequest.getCardNumber());
+        checkValidCvv(cardRequest.getCvv());
         return Card.builder()
                 .cardNumber(cardNumber)
                 .cvv(cardRequest.getCvv())
                 .expirationDate(cardRequest.getExpirationDate())
                 .build();
     }
-    
-    /*******************************************************/
 
-
-    public void checkValidExpirationDate(String expirationDate){
-
-    }
-
-    private void checkValidCvv(String cvv) {
-        if (cvv.length() != 3||isContainChar(cvv))
+    private void checkValidCvv(String cvvNumber) {
+        if (cvvNumber.matches(".*[a-zA-Z].*") || !cvvNumber.matches("\\d{3}"))
             throw new CardException(CardException.INVALID_CVV);
     }
-
-    private boolean isContainChar(String str) {
-        for (char c : str.toCharArray()) {
-            if (!Character.isDigit(c)) return true;
-        }
-        return false;
-    }
-    
-    
 }

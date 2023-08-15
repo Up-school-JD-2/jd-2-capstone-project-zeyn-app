@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FlightRequest {
-    private LocalDateTime departureDateTime; // 2023-08-05T10:15:30
+    private LocalDateTime departureDateTime;
     private Long routeId;
     private Double price;
 }

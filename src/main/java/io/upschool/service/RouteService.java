@@ -35,7 +35,7 @@ public class RouteService {
         return getResponse(route);
     }
 
-    public Route getRoute(Long routeId) throws RouteException {
+    public Route getRoute(Long routeId){
         return routeRepository.findById(routeId).orElseThrow(() -> new RouteException(RouteException.DATA_NOT_FOUND));
     }
 

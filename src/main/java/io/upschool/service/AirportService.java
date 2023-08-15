@@ -34,7 +34,7 @@ public class AirportService {
         return airportList.stream().map(AirportService::getAirportResponse).toList();
     }
 
-    public Airport getAirport(Long airportId) throws AirportException {
+    public Airport getAirport(Long airportId){
         return airportRepository.findById(airportId).orElseThrow(() -> new AirportException(AirportException.DATA_NOT_FOUND));
     }
 

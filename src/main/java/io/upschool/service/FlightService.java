@@ -38,7 +38,7 @@ public class FlightService {
         return flights.stream().map(this::getAirlineFlightResponse).toList();
     }
 
-    public Flight getFlightById(Long id) throws FlightException {
+    public Flight getFlightById(Long id){
         return flightRepository.findById(id).orElseThrow(() -> new FlightException(FlightException.DATA_NOT_FOUND));
     }
 

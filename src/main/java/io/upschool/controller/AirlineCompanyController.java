@@ -3,9 +3,8 @@ package io.upschool.controller;
 import io.upschool.dto.BaseResponse;
 import io.upschool.dto.airlineCompanyDto.AirlineCompanyRequest;
 import io.upschool.dto.airlineCompanyDto.AirlineCompanyResponse;
-import io.upschool.dto.flightDto.FlightRequest;
 import io.upschool.dto.flightDto.AirlineFlightResponse;
-import io.upschool.exceptions.AirlineCompanyException;
+import io.upschool.dto.flightDto.FlightRequest;
 import io.upschool.service.AirlineCompanyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +43,7 @@ public class AirlineCompanyController {
     }
 
     @GetMapping("/flights")
-    public ResponseEntity<BaseResponse<List<AirlineFlightResponse>>> getAllFlightsByAirlineCompanyId(@RequestParam("companyId") Long id) throws AirlineCompanyException {
+    public ResponseEntity<BaseResponse<List<AirlineFlightResponse>>> getAllFlightsByAirlineCompanyId(@RequestParam("companyId") Long id) {
         List<AirlineFlightResponse> flights = airlineCompanyService.getAllFlightsByAirlineCompanyId(id);
 
         BaseResponse<List<AirlineFlightResponse>> baseResponse = BaseResponse.<List<AirlineFlightResponse>>builder()
@@ -71,7 +70,7 @@ public class AirlineCompanyController {
     public ResponseEntity<BaseResponse<List<AirlineFlightResponse>> >getAllFlightsByRoutesAndByAirlineId
             (@RequestParam("id") Long companyId,
              @RequestParam("from") String departureCity,
-             @RequestParam("to") String arrivalCity) throws AirlineCompanyException {
+             @RequestParam("to") String arrivalCity) {
 
         List<AirlineFlightResponse> flightsByRoutesAndByAirlineId = airlineCompanyService.getAllFlightsByRoutesAndByAirlineId(companyId, departureCity, arrivalCity);
         BaseResponse<List<AirlineFlightResponse>> baseResponse = BaseResponse.<List<AirlineFlightResponse>>builder()
@@ -84,7 +83,7 @@ public class AirlineCompanyController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createAirlineCompany(@Valid @RequestBody AirlineCompanyRequest airlineCompanyRequest) throws AirlineCompanyException {
+    public ResponseEntity<Object> createAirlineCompany(@Valid @RequestBody AirlineCompanyRequest airlineCompanyRequest) {
         AirlineCompanyResponse airlineCompany = airlineCompanyService.createAirlineCompany(airlineCompanyRequest);
         var response = BaseResponse.<AirlineCompanyResponse>builder()
                 .status(HttpStatus.CREATED.value())
