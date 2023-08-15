@@ -116,7 +116,7 @@
 					"response": []
 				},
 				{
-					"name": "get routes",
+					"name": "get all routes",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -129,6 +129,36 @@
 							"path": [
 								"api",
 								"routes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get route",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/routes/search?from=İstanbul&to=İzmir",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"routes",
+								"search"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "İstanbul"
+								},
+								{
+									"key": "to",
+									"value": "İzmir"
+								}
 							]
 						}
 					},
@@ -162,37 +192,6 @@
 							"path": [
 								"api",
 								"airlineCompanies"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "create flight on airline company",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"price\": 900.85,\r\n    \"departureDateTime\": \"2023-08-10T10:15:30\",\r\n    \"routeId\": 2\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/airlineCompanies/createFligth/2",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"airlineCompanies",
-								"createFligth",
-								"2"
 							]
 						}
 					},
@@ -242,14 +241,29 @@
 						}
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "flights",
+			"item": [
 				{
-					"name": "get flights by companyId",
+					"name": "create flight on airline company",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"price\": 900.85,\r\n    \"departureDateTime\": \"2023-08-10T10:15:30\",\r\n    \"routeId\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "localhost:8080/api/airlineCompanies/flights?companyId=2",
+							"raw": "http://localhost:8080/api/airlineCompanies/createFligth/2",
+							"protocol": "http",
 							"host": [
 								"localhost"
 							],
@@ -257,43 +271,8 @@
 							"path": [
 								"api",
 								"airlineCompanies",
-								"flights"
-							],
-							"query": [
-								{
-									"key": "companyId",
-									"value": "2"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get flights by route",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/api/airlineCompanies/route?from=İstanbul&to=Ankara",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"airlineCompanies",
-								"route"
-							],
-							"query": [
-								{
-									"key": "from",
-									"value": "İstanbul"
-								},
-								{
-									"key": "to",
-									"value": "Ankara"
-								}
+								"createFligth",
+								"2"
 							]
 						}
 					},
@@ -332,12 +311,33 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "flights",
-			"item": [
+				},
+				{
+					"name": "get flights by companyId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/airlineCompanies/flights?companyId=2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airlineCompanies",
+								"flights"
+							],
+							"query": [
+								{
+									"key": "companyId",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "get all flights",
 					"request": {
@@ -352,6 +352,36 @@
 							"path": [
 								"api",
 								"flights"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get flights by route",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/airlineCompanies/route?from=İstanbul&to=Ankara",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"airlineCompanies",
+								"route"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "İstanbul"
+								},
+								{
+									"key": "to",
+									"value": "Ankara"
+								}
 							]
 						}
 					},
