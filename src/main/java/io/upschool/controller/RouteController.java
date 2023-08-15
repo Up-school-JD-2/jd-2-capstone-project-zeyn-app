@@ -29,6 +29,17 @@ public class RouteController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<BaseResponse<List<RouteResponse>>> getAllRouteByLocations(@RequestParam("from") String departureCity, @RequestParam("to") String arrivalCity) {
+        List<RouteResponse> routes = routeService.getRouteByLocations(departureCity, arrivalCity);
+        BaseResponse<List<RouteResponse>> baseResponse = BaseResponse.<List<RouteResponse>>builder()
+                .status(HttpStatus.OK.value())
+                .isSuccess(true)
+                .data(routes)
+                .build();
+        return ResponseEntity.ok(baseResponse);
+    }
+
     @PostMapping
     public ResponseEntity<BaseResponse<RouteResponse>> createRoute(@Valid @RequestBody RouteRequest routeRequest){
         RouteResponse routeResponse = routeService.createRoute(routeRequest);

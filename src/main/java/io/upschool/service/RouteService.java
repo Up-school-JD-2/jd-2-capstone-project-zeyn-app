@@ -2,9 +2,9 @@ package io.upschool.service;
 
 import io.upschool.dto.routeDto.RouteRequest;
 import io.upschool.dto.routeDto.RouteResponse;
-import io.upschool.exceptions.RouteException;
 import io.upschool.entity.Airport;
 import io.upschool.entity.Route;
+import io.upschool.exceptions.RouteException;
 import io.upschool.repository.RouteRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +20,22 @@ public class RouteService {
 
     public List<RouteResponse> getAllRoutes() {
         List<Route> routeList = routeRepository.findAll();
-        return routeList.stream().map(RouteService::getRouteResponse).toList();
+        return routeList.stream().map(this::getRouteResponse).toList();
+    }
+
+    public List<RouteResponse> getRouteByLocations(String departureCity, String arrivalCity) {
+        List<Route> routes = routeRepository.findAllByDepartureAirport_LocationAndArrivalAirport_Location(departureCity, arrivalCity);
+        return routes.stream().map(this::getResponse).toList();
     }
 
     @Transactional
     public RouteResponse createRoute(RouteRequest routeRequest) {
+
+        checkIfAirportsSame(routeRequest.getArrivalAirportId(), routeRequest.getDepartureAirportId());
+
         Airport arrivalAirport = airportService.getAirport(routeRequest.getArrivalAirportId());
         Airport departureAirport = airportService.getAirport(routeRequest.getDepartureAirportId());
 
-        checkIfAirportsSame(arrivalAirport, departureAirport);
         checkIfExist(arrivalAirport, departureAirport);
 
         Route route = routeRepository.save(getRoute(arrivalAirport, departureAirport));
@@ -39,7 +46,7 @@ public class RouteService {
         return routeRepository.findById(routeId).orElseThrow(() -> new RouteException(RouteException.DATA_NOT_FOUND));
     }
 
-    private static RouteResponse getResponse(Route route) {
+    private RouteResponse getResponse(Route route) {
         return RouteResponse.builder()
                 .id(route.getId())
                 .departureAirportName(route.getDepartureAirport().getName())
@@ -47,7 +54,7 @@ public class RouteService {
                 .build();
     }
 
-    private static Route getRoute(Airport arrivalAirport, Airport departureAirport) {
+    private Route getRoute(Airport arrivalAirport, Airport departureAirport) {
         return Route.builder()
                 .arrivalAirport(arrivalAirport)
                 .departureAirport(departureAirport)
@@ -55,7 +62,7 @@ public class RouteService {
                 .build();
     }
 
-    private static RouteResponse getRouteResponse(Route route) {
+    private RouteResponse getRouteResponse(Route route) {
         return RouteResponse.builder()
                 .id(route.getId())
                 .arrivalAirportName(route.getArrivalAirport().getName())
@@ -68,8 +75,8 @@ public class RouteService {
             throw new RouteException(RouteException.ROUTE_DUPLICATED_EXCEPTION);
     }
 
-    private static void checkIfAirportsSame(Airport arrivalAirport, Airport departureAirport) {
-        if (arrivalAirport.getName().equalsIgnoreCase(departureAirport.getName()))
+    private void checkIfAirportsSame(Long arrivalAirportId, Long departureAirportId) {
+        if (arrivalAirportId==departureAirportId)
             throw new RouteException(RouteException.DEPARTURE_AND_ARRIVAL_AIRPORT_CANNOT_BE_THE_SAME);
     }
 }
