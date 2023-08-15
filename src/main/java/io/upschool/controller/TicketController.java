@@ -40,11 +40,11 @@ public class TicketController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/searchByIdentityNumber")
-    public ResponseEntity<BaseResponse<TicketResponse>> getTicketByIdentityNumber(@RequestParam("identityNumber") String identityNumber) {
-        TicketResponse ticket = ticketService.getTicketByIdentityNumber(identityNumber);
-        BaseResponse<TicketResponse> response = BaseResponse.<TicketResponse>builder()
+    public ResponseEntity<BaseResponse<List<TicketResponse>>> getTicketByIdentityNumber(@RequestParam("identityNumber") String identityNumber) {
+        List<TicketResponse> tickets = ticketService.getTicketByIdentityNumber(identityNumber);
+        BaseResponse<List<TicketResponse>> response = BaseResponse.<List<TicketResponse>>builder()
                 .status(HttpStatus.OK.value())
-                .data(ticket)
+                .data(tickets)
                 .isSuccess(true)
                 .build();
         return ResponseEntity.ok(response);

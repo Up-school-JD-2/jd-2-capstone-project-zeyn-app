@@ -33,9 +33,9 @@ public class TicketService {
         return getTicketResponse(ticket);
     }
 
-    public TicketResponse getTicketByIdentityNumber(String identityNumber) {
-        Ticket ticket = ticketRepository.findByPassengerIdentityNumber(identityNumber);
-        return getTicketResponse(ticket);
+    public List<TicketResponse> getTicketByIdentityNumber(String identityNumber) {
+        List<Ticket> tickets = ticketRepository.findByPassengerIdentityNumber(identityNumber);
+        return tickets.stream().map(this::getTicketResponse).toList();
     }
 
     @Transactional
